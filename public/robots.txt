@@ -1,0 +1,9 @@
+# Robots.txt for Just FYI
+# https://justfyi.app
+
+# Allow all crawlers access to all content
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://justfyi.app/sitemap-index.xml

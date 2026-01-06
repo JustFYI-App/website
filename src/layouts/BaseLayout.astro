@@ -1,0 +1,325 @@
+---
+/**
+ * BaseLayout
+ *
+ * The main layout component for all pages on the Just FYI website.
+ * Provides HTML5 semantic structure, SEO meta tags, hreflang tags,
+ * and consistent header/footer across all pages.
+ */
+
+import { siteConfig, getSiteUrl } from '@config/site';
+import {
+  type LanguageCode,
+  defaultLanguage,
+  languageConfigs,
+} from '@i18n/languages';
+import {
+  getAlternateLanguageLinks,
+  getXDefaultUrl,
+  useTranslations,
+} from '@i18n/utils';
+import Header from '@components/Header.astro';
+import Footer from '@components/Footer.astro';
+import '@styles/global.css';
+
+interface Props {
+  /**
+   * Page title (will be combined with site name)
+   */
+  title: string;
+
+  /**
+   * Page description for meta tags
+   */
+  description: string;
+
+  /**
+   * Current language code
+   */
+  lang?: LanguageCode;
+
+  /**
+   * Current page path (without language prefix, used for hreflang generation)
+   */
+  pagePath?: string;
+
+  /**
+   * Optional canonical URL override
+   */
+  canonicalUrl?: string;
+
+  /**
+   * Optional Open Graph image override
+   */
+  ogImage?: string;
+
+  /**
+   * Optional page type for Open Graph (default: "website")
+   */
+  ogType?: string;
+}
+
+const {
+  title,
+  description,
+  lang = defaultLanguage,
+  pagePath = '',
+  canonicalUrl,
+  ogImage = siteConfig.meta.ogImage,
+  ogType = 'website',
+} = Astro.props;
+
+// Get translations for the current language
+const t = useTranslations(lang);
+
+// Get language configuration
+const langConfig = languageConfigs[lang];
+
+// Generate full title with site name
+const fullTitle = title ? `${title} | ${siteConfig.name}` : `${siteConfig.name} - ${siteConfig.tagline}`;
+
+// Base URL for links
+const baseUrl = getSiteUrl();
+
+// Generate alternate language links for hreflang tags
+const alternateLinks = getAlternateLanguageLinks(pagePath, baseUrl, lang);
+
+// Get x-default URL (English version)
+const xDefaultUrl = getXDefaultUrl(pagePath, baseUrl);
+
+// Generate canonical URL
+const currentPath = Astro.url.pathname;
+const canonical = canonicalUrl || `${baseUrl}${currentPath}`;
+
+// Full OG image URL
+const fullOgImage = ogImage.startsWith('http') ? ogImage : `${baseUrl}${ogImage}`;
+
+// Breadcrumb schema generation
+interface BreadcrumbItem {
+  name: string;
+  url: string;
+}
+
+// Map page slugs to nav translation keys
+const pageNavKeys: Record<string, string> = {
+  'faq': 'faq',
+  'about': 'about',
+  'contact': 'contact',
+  'privacy-policy': 'privacyPolicy',
+  'terms-of-service': 'termsOfService',
+  'how-it-works': 'howItWorks',
+};
+
+function generateBreadcrumbs(): BreadcrumbItem[] {
+  const breadcrumbs: BreadcrumbItem[] = [];
+
+  // Always start with Home
+  const homeUrl = lang === defaultLanguage ? `${baseUrl}/` : `${baseUrl}/${lang}/`;
+  breadcrumbs.push({
+    name: t('nav.home'),
+    url: homeUrl,
+  });
+
+  // Add current page if not home
+  if (pagePath && pagePath !== '' && pagePath !== 'home') {
+    const navKey = pageNavKeys[pagePath];
+    // @ts-ignore - dynamic key lookup
+    const pageName = navKey ? t(`nav.${navKey}`) : pagePath.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+    const pageUrl = lang === defaultLanguage ? `${baseUrl}/${pagePath}` : `${baseUrl}/${lang}/${pagePath}`;
+
+    breadcrumbs.push({
+      name: pageName,
+      url: pageUrl,
+    });
+  }
+
+  return breadcrumbs;
+}
+
+const breadcrumbs = generateBreadcrumbs();
+const hasBreadcrumbs = breadcrumbs.length > 1;
+
+// Generate breadcrumb schema (only for inner pages)
+const breadcrumbSchema = hasBreadcrumbs ? {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": breadcrumbs.map((item, index) => ({
+    "@type": "ListItem",
+    "position": index + 1,
+    "name": item.name,
+    "item": item.url,
+  }))
+} : null;
+---
+
+<!DOCTYPE html>
+<html lang={langConfig.hrefLang} dir={langConfig.isRTL ? 'rtl' : 'ltr'}>
+  <head>
+    <!-- Inline script to prevent flash of wrong theme -->
+    <script is:inline>
+      (function() {
+        var theme = localStorage.getItem('theme');
+        if (!theme) {
+          theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        document.documentElement.setAttribute('data-theme', theme);
+      })();
+    </script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- Primary Meta Tags -->
+    <title>{fullTitle}</title>
+    <meta name="title" content={fullTitle} />
+    <meta name="description" content={description} />
+    <meta name="keywords" content={siteConfig.meta.keywords.join(', ')} />
+    <meta name="author" content={siteConfig.meta.author} />
+
+    <!-- Mobile & PWA Meta Tags -->
+    <meta name="theme-color" content={siteConfig.colors.primary} />
+    <meta name="application-name" content={siteConfig.name} />
+    <meta name="apple-mobile-web-app-title" content={siteConfig.name} />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="format-detection" content="telephone=no" />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href={canonical} />
+
+    <!-- Favicon -->
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json" />
+
+    <!-- hreflang tags for all language versions -->
+    {alternateLinks.map((link) => (
+      <link rel="alternate" hreflang={link.hrefLang} href={link.url} />
+    ))}
+    <link rel="alternate" hreflang="x-default" href={xDefaultUrl} />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content={ogType} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={fullOgImage} />
+    <meta property="og:site_name" content={siteConfig.name} />
+    <meta property="og:locale" content={langConfig.hrefLang} />
+    {alternateLinks
+      .filter((link) => !link.isCurrent)
+      .map((link) => (
+        <meta property="og:locale:alternate" content={link.hrefLang} />
+      ))}
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content={canonical} />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={fullOgImage} />
+    {siteConfig.meta.twitterHandle && (
+      <meta name="twitter:site" content={siteConfig.meta.twitterHandle} />
+    )}
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": `${baseUrl}/#organization`,
+          "name": siteConfig.name,
+          "url": baseUrl,
+          "logo": {
+            "@type": "ImageObject",
+            "url": `${baseUrl}/og-image.png`
+          },
+          "description": siteConfig.description,
+          "email": siteConfig.contact.email,
+          "sameAs": [
+            siteConfig.links.github
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "@id": `${baseUrl}/#website`,
+          "url": baseUrl,
+          "name": siteConfig.name,
+          "description": siteConfig.description,
+          "publisher": {
+            "@id": `${baseUrl}/#organization`
+          },
+          "inLanguage": langConfig.hrefLang
+        },
+        {
+          "@type": "SoftwareApplication",
+          "name": siteConfig.name,
+          "description": siteConfig.description,
+          "applicationCategory": "HealthApplication",
+          "operatingSystem": "Android, iOS",
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+          },
+          "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "5",
+            "ratingCount": "1"
+          }
+        }
+      ]
+    })} />
+
+    <!-- Breadcrumb Schema (for inner pages) -->
+    {hasBreadcrumbs && (
+      <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+    )}
+
+    <!-- Additional slots for page-specific head content -->
+    <slot name="head" />
+  </head>
+  <body>
+    <!-- Skip to content link for accessibility -->
+    <a href="#main-content" class="skip-link">
+      {t('common.skipToContent')}
+    </a>
+
+    <!-- Header with navigation -->
+    <Header lang={lang} currentPath={currentPath} />
+
+    <!-- Main content area -->
+    <main id="main-content" class="main-content">
+      <slot />
+    </main>
+
+    <!-- Footer -->
+    <Footer lang={lang} />
+
+    <!-- Slot for page-specific scripts (if absolutely necessary) -->
+    <slot name="scripts" />
+  </body>
+</html>
+
+<style>
+  /* Layout styles */
+  body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  .main-content {
+    flex: 1 0 auto;
+  }
+
+  /* Ensure footer stays at bottom */
+  :global(footer) {
+    flex-shrink: 0;
+  }
+</style>

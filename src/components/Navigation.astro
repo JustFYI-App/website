@@ -1,0 +1,155 @@
+---
+/**
+ * Navigation Component
+ *
+ * Renders navigation links with proper i18n paths and active state highlighting.
+ * Used in both the header desktop navigation and mobile menu.
+ */
+
+import { type LanguageCode, defaultLanguage } from '@i18n/languages';
+import { getLocalizedPath, useTranslations } from '@i18n/utils';
+
+interface Props {
+  /**
+   * Current language for translations and path generation
+   */
+  lang?: LanguageCode;
+
+  /**
+   * Current page path for determining active state
+   */
+  currentPath?: string;
+
+  /**
+   * Optional CSS class for styling
+   */
+  class?: string;
+
+  /**
+   * Whether to display as vertical list (for mobile menu)
+   */
+  vertical?: boolean;
+}
+
+const {
+  lang = defaultLanguage,
+  currentPath = '/',
+  class: className = '',
+  vertical = false,
+} = Astro.props;
+
+// Get translations
+const t = useTranslations(lang);
+
+// Define navigation items
+const navItems = [
+  { key: 'home', path: '', label: t('nav.home') },
+  { key: 'how-it-works', path: 'how-it-works', label: t('nav.howItWorks') },
+  { key: 'faq', path: 'faq', label: t('nav.faq') },
+  { key: 'about', path: 'about', label: t('nav.about') },
+  { key: 'contact', path: 'contact', label: t('nav.contact') },
+];
+
+/**
+ * Check if a nav item is active based on current path
+ */
+function isActive(itemPath: string): boolean {
+  // Normalize paths for comparison
+  const normalizedCurrent = currentPath.replace(/\/$/, '') || '/';
+  const localizedPath = getLocalizedPath(itemPath, lang);
+  const normalizedItem = localizedPath.replace(/\/$/, '') || '/';
+
+  // For home page, exact match only
+  if (itemPath === '') {
+    return normalizedCurrent === normalizedItem;
+  }
+
+  // For other pages, check if current path starts with item path
+  return normalizedCurrent === normalizedItem ||
+    normalizedCurrent.startsWith(`${normalizedItem}/`);
+}
+---
+
+<nav class:list={['nav', { 'nav--vertical': vertical }, className]} aria-label="Main navigation">
+  <ul class="nav__list" role="list">
+    {navItems.map((item) => (
+      <li class="nav__item">
+        <a
+          href={getLocalizedPath(item.path, lang)}
+          class:list={['nav__link', { 'nav__link--active': isActive(item.path) }]}
+          aria-current={isActive(item.path) ? 'page' : undefined}
+        >
+          {item.label}
+        </a>
+      </li>
+    ))}
+  </ul>
+</nav>
+
+<style>
+  .nav__list {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .nav--vertical .nav__list {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-2);
+  }
+
+  .nav__item {
+    margin: 0;
+  }
+
+  .nav__link {
+    display: block;
+    padding: var(--space-2) var(--space-4);
+    font-size: var(--text-base);
+    font-weight: var(--font-medium);
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    border-radius: var(--radius-md);
+    transition: color var(--transition-fast) ease-in-out,
+      background-color var(--transition-fast) ease-in-out;
+  }
+
+  .nav__link:hover {
+    color: var(--color-primary);
+    background-color: var(--color-bg-tertiary);
+  }
+
+  .nav__link:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  .nav__link:focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  .nav__link:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  .nav__link--active {
+    color: var(--color-primary);
+    background-color: var(--color-primary-light);
+    background-color: rgba(66, 133, 244, 0.1);
+  }
+
+  .nav__link--active:hover {
+    background-color: rgba(66, 133, 244, 0.15);
+  }
+
+  /* Vertical navigation styles (for mobile menu) */
+  .nav--vertical .nav__link {
+    padding: var(--space-3) var(--space-4);
+    font-size: var(--text-lg);
+  }
+</style>

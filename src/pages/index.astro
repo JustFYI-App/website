@@ -1,0 +1,24 @@
+---
+/**
+ * Home Page (English)
+ *
+ * The main landing page for the Just FYI website.
+ * Uses the BaseLayout for consistent structure and SEO.
+ */
+
+import BaseLayout from '@layouts/BaseLayout.astro';
+import HomePage from '@components/HomePage.astro';
+import { useTranslations } from '@i18n/utils';
+import { defaultLanguage } from '@i18n/languages';
+
+const t = useTranslations(defaultLanguage);
+---
+
+<BaseLayout
+  title=""
+  description={t('meta.homeDescription')}
+  lang={defaultLanguage}
+  pagePath=""
+>
+  <HomePage lang={defaultLanguage} />
+</BaseLayout>

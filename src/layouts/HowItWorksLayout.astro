@@ -1,0 +1,249 @@
+---
+/**
+ * HowItWorksLayout
+ *
+ * Layout for the How It Works page with step-by-step numbered sections.
+ * Provides visual step indicators and privacy emphasis callouts.
+ * Implements mobile-first responsive design with step indicators.
+ */
+
+import BaseLayout from './BaseLayout.astro';
+import { type LanguageCode, defaultLanguage } from '@i18n/languages';
+
+interface Props {
+  /**
+   * Page title
+   */
+  title: string;
+
+  /**
+   * Page description for meta tags
+   */
+  description: string;
+
+  /**
+   * Current language code
+   */
+  lang?: LanguageCode;
+
+  /**
+   * Current page path (without language prefix)
+   */
+  pagePath?: string;
+}
+
+const {
+  title,
+  description,
+  lang = defaultLanguage,
+  pagePath = '',
+} = Astro.props;
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  lang={lang}
+  pagePath={pagePath}
+>
+  <article class="how-it-works section">
+    <div class="how-it-works__container container content-layout">
+      <header class="how-it-works__header text-center">
+        <h1 class="how-it-works__title">{title}</h1>
+      </header>
+
+      <div class="how-it-works__content">
+        <slot />
+      </div>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  /* How It Works Page - Mobile First */
+  .how-it-works__header {
+    margin-bottom: var(--space-6);
+  }
+
+  .how-it-works__title {
+    font-size: var(--text-2xl);
+    color: var(--color-primary);
+    margin-bottom: var(--space-3);
+  }
+
+  .how-it-works__content {
+    line-height: var(--leading-relaxed);
+  }
+
+  /* Intro paragraph - Mobile */
+  .how-it-works__content > :global(p:first-of-type) {
+    text-align: center;
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-8);
+  }
+
+  /* Step headers (h2) - numbered steps - Mobile */
+  .how-it-works__content :global(h2) {
+    position: relative;
+    margin-top: var(--space-10);
+    margin-bottom: var(--space-4);
+    padding: var(--space-3) var(--space-3) var(--space-3) var(--space-14);
+    font-size: var(--text-lg);
+    color: var(--color-text-primary);
+    background-color: var(--color-bg-secondary);
+    border-radius: var(--radius-xl);
+    border-left: 4px solid var(--color-primary);
+    counter-increment: step-counter;
+  }
+
+  .how-it-works__content :global(h2:first-of-type) {
+    margin-top: 0;
+  }
+
+  /* Step number indicator */
+  .how-it-works__content :global(h2)::before {
+    content: counter(step-counter);
+    position: absolute;
+    left: var(--space-3);
+    top: 50%;
+    transform: translateY(-50%);
+    width: 36px;
+    height: 36px;
+    background-color: var(--color-primary);
+    color: var(--color-text-inverse);
+    font-size: var(--text-base);
+    font-weight: var(--font-bold);
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+  }
+
+  /* Subheaders (h3) - What happens, How it protects, etc. */
+  .how-it-works__content :global(h3) {
+    margin-top: var(--space-5);
+    margin-bottom: var(--space-2);
+    font-size: var(--text-base);
+    color: var(--color-text-primary);
+    font-weight: var(--font-semibold);
+  }
+
+  /* Subsubheaders (h4) */
+  .how-it-works__content :global(h4) {
+    margin-top: var(--space-4);
+    margin-bottom: var(--space-2);
+    font-size: var(--text-sm);
+    color: var(--color-text-primary);
+    font-weight: var(--font-semibold);
+  }
+
+  /* Paragraphs */
+  .how-it-works__content :global(p) {
+    margin-bottom: var(--space-4);
+    color: var(--color-text-secondary);
+  }
+
+  /* Privacy callouts - paragraphs starting with "Privacy at this step" */
+  .how-it-works__content :global(p:has(strong:first-child)) {
+    padding: var(--space-3);
+    background-color: rgba(66, 133, 244, 0.05);
+    border-left: 3px solid var(--color-primary);
+    border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+    margin-top: var(--space-4);
+  }
+
+  /* Lists */
+  .how-it-works__content :global(ul),
+  .how-it-works__content :global(ol) {
+    margin-bottom: var(--space-4);
+    padding-left: var(--space-5);
+  }
+
+  .how-it-works__content :global(li) {
+    margin-bottom: var(--space-2);
+  }
+
+  .how-it-works__content :global(strong) {
+    color: var(--color-text-primary);
+  }
+
+  .how-it-works__content :global(a) {
+    color: var(--color-primary);
+    text-decoration: underline;
+  }
+
+  .how-it-works__content :global(a:hover) {
+    color: var(--color-primary-dark);
+  }
+
+  /* Horizontal rules - section separators */
+  .how-it-works__content :global(hr) {
+    margin: var(--space-10) 0;
+    border: none;
+    border-top: 2px dashed var(--color-border);
+  }
+
+  /* Tablet adjustments */
+  @media (min-width: 640px) {
+    .how-it-works__header {
+      margin-bottom: var(--space-8);
+    }
+
+    .how-it-works__title {
+      font-size: var(--text-3xl);
+      margin-bottom: var(--space-4);
+    }
+
+    .how-it-works__content > :global(p:first-of-type) {
+      font-size: var(--text-lg);
+      margin-bottom: var(--space-10);
+    }
+
+    .how-it-works__content :global(h2) {
+      margin-top: var(--space-12);
+      margin-bottom: var(--space-6);
+      padding: var(--space-4) var(--space-4) var(--space-4) var(--space-16);
+      font-size: var(--text-xl);
+    }
+
+    .how-it-works__content :global(h2)::before {
+      left: var(--space-4);
+      width: 40px;
+      height: 40px;
+      font-size: var(--text-lg);
+    }
+
+    .how-it-works__content :global(h3) {
+      margin-top: var(--space-6);
+      margin-bottom: var(--space-3);
+      font-size: var(--text-lg);
+    }
+
+    .how-it-works__content :global(p:has(strong:first-child)) {
+      padding: var(--space-4);
+    }
+
+    .how-it-works__content :global(ul),
+    .how-it-works__content :global(ol) {
+      padding-left: var(--space-6);
+    }
+
+    .how-it-works__content :global(hr) {
+      margin: var(--space-12) 0;
+    }
+  }
+
+  /* Desktop adjustments */
+  @media (min-width: 1024px) {
+    .how-it-works__title {
+      font-size: var(--text-4xl);
+    }
+  }
+
+  /* Initialize counter at the start of the content */
+  .how-it-works__content {
+    counter-reset: step-counter;
+  }
+</style>

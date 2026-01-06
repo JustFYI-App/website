@@ -1,0 +1,281 @@
+---
+/**
+ * FAQLayout
+ *
+ * Layout for the FAQ page with accordion-style expandable sections.
+ * Uses the HTML <details> element for zero-JavaScript accordion functionality.
+ * Implements mobile-first responsive design with accessible accordion styles.
+ * Includes FAQ structured data (JSON-LD) for SEO.
+ */
+
+import BaseLayout from './BaseLayout.astro';
+import { type LanguageCode, defaultLanguage } from '@i18n/languages';
+import { getSiteUrl } from '@config/site';
+
+interface FAQItem {
+  question: string;
+  answer: string;
+}
+
+interface Props {
+  /**
+   * Page title
+   */
+  title: string;
+
+  /**
+   * Page description for meta tags
+   */
+  description: string;
+
+  /**
+   * Current language code
+   */
+  lang?: LanguageCode;
+
+  /**
+   * Current page path (without language prefix)
+   */
+  pagePath?: string;
+
+  /**
+   * Raw markdown body for FAQ schema generation
+   */
+  rawBody?: string;
+}
+
+const {
+  title,
+  description,
+  lang = defaultLanguage,
+  pagePath = '',
+  rawBody = '',
+} = Astro.props;
+
+/**
+ * Parse FAQ markdown to extract questions and answers
+ * Format: ### Question\n\nAnswer text...
+ */
+function parseFAQFromMarkdown(markdown: string): FAQItem[] {
+  const faqs: FAQItem[] = [];
+  const lines = markdown.split('\n');
+
+  let currentQuestion = '';
+  let currentAnswer: string[] = [];
+
+  for (const line of lines) {
+    // Check for h3 (question)
+    if (line.startsWith('### ')) {
+      // Save previous Q&A if exists
+      if (currentQuestion && currentAnswer.length > 0) {
+        faqs.push({
+          question: currentQuestion,
+          answer: currentAnswer.join('\n').trim()
+            // Convert markdown to plain text for schema
+            .replace(/\*\*([^*]+)\*\*/g, '$1') // Bold
+            .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // Links
+            .replace(/^- /gm, '• ') // List items
+            .replace(/^\d+\. /gm, '') // Numbered lists
+        });
+      }
+      currentQuestion = line.replace('### ', '').trim();
+      currentAnswer = [];
+    }
+    // Skip h2 (category headers)
+    else if (line.startsWith('## ')) {
+      // Save previous Q&A if exists
+      if (currentQuestion && currentAnswer.length > 0) {
+        faqs.push({
+          question: currentQuestion,
+          answer: currentAnswer.join('\n').trim()
+            .replace(/\*\*([^*]+)\*\*/g, '$1')
+            .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+            .replace(/^- /gm, '• ')
+            .replace(/^\d+\. /gm, '')
+        });
+      }
+      currentQuestion = '';
+      currentAnswer = [];
+    }
+    // Accumulate answer lines
+    else if (currentQuestion) {
+      currentAnswer.push(line);
+    }
+  }
+
+  // Don't forget the last Q&A
+  if (currentQuestion && currentAnswer.length > 0) {
+    faqs.push({
+      question: currentQuestion,
+      answer: currentAnswer.join('\n').trim()
+        .replace(/\*\*([^*]+)\*\*/g, '$1')
+        .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+        .replace(/^- /gm, '• ')
+        .replace(/^\d+\. /gm, '')
+    });
+  }
+
+  return faqs;
+}
+
+const faqItems = parseFAQFromMarkdown(rawBody);
+const baseUrl = getSiteUrl();
+const pageUrl = lang === 'en' ? `${baseUrl}/faq` : `${baseUrl}/${lang}/faq`;
+
+// Generate FAQ Schema
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faqItems.map(item => ({
+    "@type": "Question",
+    "name": item.question,
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": item.answer
+    }
+  }))
+};
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  lang={lang}
+  pagePath={pagePath}
+>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  <article class="faq-page section">
+    <div class="faq-page__container container content-layout">
+      <header class="faq-page__header text-center">
+        <h1 class="faq-page__title">{title}</h1>
+      </header>
+
+      <div class="faq-page__content">
+        <slot />
+      </div>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  /* FAQ Page - Mobile First */
+  .faq-page__header {
+    margin-bottom: var(--space-6);
+  }
+
+  .faq-page__title {
+    font-size: var(--text-2xl);
+    color: var(--color-primary);
+    margin-bottom: var(--space-3);
+  }
+
+  .faq-page__content {
+    line-height: var(--leading-relaxed);
+  }
+
+  /* Category headers (h2) - Mobile */
+  .faq-page__content :global(h2) {
+    margin-top: var(--space-8);
+    margin-bottom: var(--space-4);
+    padding-bottom: var(--space-2);
+    font-size: var(--text-lg);
+    color: var(--color-primary);
+    border-bottom: 2px solid var(--color-primary);
+  }
+
+  .faq-page__content :global(h2:first-of-type) {
+    margin-top: 0;
+  }
+
+  /* Question headers (h3) - styled as accordion triggers */
+  .faq-page__content :global(h3) {
+    margin-top: var(--space-3);
+    margin-bottom: var(--space-2);
+    padding: var(--space-4);
+    font-size: var(--text-base);
+    font-weight: var(--font-semibold);
+    color: var(--color-text-primary);
+    background-color: var(--color-bg-secondary);
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    min-height: var(--min-touch-target);
+    display: flex;
+    align-items: center;
+    transition: background-color var(--transition-fast) ease-in-out;
+  }
+
+  .faq-page__content :global(h3:hover) {
+    background-color: var(--color-bg-tertiary);
+  }
+
+  .faq-page__content :global(h3:focus) {
+    outline: none;
+    box-shadow: inset 0 0 0 2px var(--color-focus);
+  }
+
+  .faq-page__content :global(h3:focus:not(:focus-visible)) {
+    box-shadow: none;
+  }
+
+  .faq-page__content :global(h3:focus-visible) {
+    outline: none;
+    box-shadow: inset 0 0 0 2px var(--color-focus);
+  }
+
+  /* Answer paragraphs */
+  .faq-page__content :global(p) {
+    margin-bottom: var(--space-4);
+    padding-left: var(--space-4);
+    color: var(--color-text-secondary);
+  }
+
+  /* Lists in answers */
+  .faq-page__content :global(ul),
+  .faq-page__content :global(ol) {
+    margin-bottom: var(--space-4);
+    padding-left: var(--space-8);
+  }
+
+  .faq-page__content :global(li) {
+    margin-bottom: var(--space-2);
+  }
+
+  .faq-page__content :global(strong) {
+    color: var(--color-text-primary);
+  }
+
+  .faq-page__content :global(a) {
+    color: var(--color-primary);
+    text-decoration: underline;
+  }
+
+  .faq-page__content :global(a:hover) {
+    color: var(--color-primary-dark);
+  }
+
+  /* Tablet adjustments */
+  @media (min-width: 640px) {
+    .faq-page__header {
+      margin-bottom: var(--space-8);
+    }
+
+    .faq-page__title {
+      font-size: var(--text-3xl);
+      margin-bottom: var(--space-4);
+    }
+
+    .faq-page__content :global(h2) {
+      margin-top: var(--space-10);
+      margin-bottom: var(--space-6);
+      padding-bottom: var(--space-3);
+      font-size: var(--text-xl);
+    }
+  }
+
+  /* Desktop adjustments */
+  @media (min-width: 1024px) {
+    .faq-page__title {
+      font-size: var(--text-4xl);
+    }
+  }
+</style>

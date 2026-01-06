@@ -1,0 +1,166 @@
+---
+/**
+ * ContentLayout
+ *
+ * Layout for general content pages like About, Contact.
+ * Provides consistent styling for content-focused pages.
+ * Implements mobile-first responsive design.
+ */
+
+import BaseLayout from './BaseLayout.astro';
+import { type LanguageCode, defaultLanguage } from '@i18n/languages';
+
+interface Props {
+  /**
+   * Page title
+   */
+  title: string;
+
+  /**
+   * Page description for meta tags
+   */
+  description: string;
+
+  /**
+   * Current language code
+   */
+  lang?: LanguageCode;
+
+  /**
+   * Current page path (without language prefix)
+   */
+  pagePath?: string;
+}
+
+const {
+  title,
+  description,
+  lang = defaultLanguage,
+  pagePath = '',
+} = Astro.props;
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  lang={lang}
+  pagePath={pagePath}
+>
+  <article class="content-page section">
+    <div class="content-page__container container content-layout">
+      <header class="content-page__header">
+        <h1 class="content-page__title">{title}</h1>
+      </header>
+
+      <div class="content-page__content prose">
+        <slot />
+      </div>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  /* Content Page - Mobile First */
+  .content-page__header {
+    margin-bottom: var(--space-6);
+  }
+
+  .content-page__title {
+    font-size: var(--text-2xl);
+    color: var(--color-primary);
+    margin-bottom: var(--space-3);
+  }
+
+  .content-page__content {
+    line-height: var(--leading-relaxed);
+  }
+
+  /* Content styles - Mobile */
+  .content-page__content :global(h2) {
+    margin-top: var(--space-8);
+    padding-top: var(--space-3);
+    font-size: var(--text-xl);
+    color: var(--color-text-primary);
+  }
+
+  .content-page__content :global(h2:first-child) {
+    margin-top: 0;
+    padding-top: 0;
+  }
+
+  .content-page__content :global(h3) {
+    margin-top: var(--space-6);
+    font-size: var(--text-lg);
+    color: var(--color-text-primary);
+  }
+
+  .content-page__content :global(h4) {
+    margin-top: var(--space-5);
+    font-size: var(--text-base);
+    color: var(--color-text-primary);
+    font-weight: var(--font-semibold);
+  }
+
+  .content-page__content :global(p) {
+    margin-bottom: var(--space-4);
+  }
+
+  .content-page__content :global(ul),
+  .content-page__content :global(ol) {
+    margin-bottom: var(--space-4);
+    padding-left: var(--space-5);
+  }
+
+  .content-page__content :global(li) {
+    margin-bottom: var(--space-2);
+  }
+
+  .content-page__content :global(strong) {
+    color: var(--color-text-primary);
+    font-weight: var(--font-semibold);
+  }
+
+  .content-page__content :global(a) {
+    color: var(--color-primary);
+    text-decoration: underline;
+  }
+
+  .content-page__content :global(a:hover) {
+    color: var(--color-primary-dark);
+  }
+
+  /* Tablet adjustments */
+  @media (min-width: 640px) {
+    .content-page__header {
+      margin-bottom: var(--space-8);
+    }
+
+    .content-page__title {
+      font-size: var(--text-3xl);
+      margin-bottom: var(--space-4);
+    }
+
+    .content-page__content :global(h2) {
+      margin-top: var(--space-10);
+      padding-top: var(--space-4);
+      font-size: var(--text-2xl);
+    }
+
+    .content-page__content :global(h3) {
+      margin-top: var(--space-8);
+      font-size: var(--text-xl);
+    }
+
+    .content-page__content :global(ul),
+    .content-page__content :global(ol) {
+      padding-left: var(--space-6);
+    }
+  }
+
+  /* Desktop adjustments */
+  @media (min-width: 1024px) {
+    .content-page__title {
+      font-size: var(--text-4xl);
+    }
+  }
+</style>

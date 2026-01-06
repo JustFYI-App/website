@@ -1,0 +1,239 @@
+---
+/**
+ * ThemeToggle Component
+ *
+ * A button that toggles between light and dark themes.
+ * Initial theme is based on system preference if no stored preference exists.
+ * Stores preference in localStorage.
+ *
+ * Accessibility features:
+ * - aria-label describes current theme and action
+ * - aria-pressed indicates current toggle state
+ * - Keyboard accessible (Enter/Space to toggle)
+ * - Icons marked as decorative with aria-hidden
+ */
+
+import { type LanguageCode, defaultLanguage } from '@i18n/languages';
+import { useTranslations } from '@i18n/utils';
+
+interface Props {
+  /**
+   * Current language for translations
+   */
+  lang?: LanguageCode;
+}
+
+const { lang = defaultLanguage } = Astro.props;
+
+// Get translations
+const t = useTranslations(lang);
+---
+
+<div class="theme-toggle">
+  <button
+    id="theme-toggle-btn"
+    type="button"
+    class="theme-toggle__button"
+    aria-label={t('common.switchToDark')}
+    aria-pressed="false"
+    title={t('common.toggleTheme')}
+  >
+    <!-- Sun icon (shown in dark mode to switch to light) -->
+    <svg
+      class="theme-toggle__icon theme-toggle__icon--sun"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+    >
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+
+    <!-- Moon icon (shown in light mode to switch to dark) -->
+    <svg
+      class="theme-toggle__icon theme-toggle__icon--moon"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+    </svg>
+  </button>
+</div>
+
+<style>
+  .theme-toggle {
+    display: flex;
+    align-items: center;
+  }
+
+  .theme-toggle__button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--min-touch-target);
+    height: var(--min-touch-target);
+    padding: var(--space-2);
+    background: transparent;
+    border: none;
+    border-radius: var(--radius-md);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: background-color var(--transition-fast) ease-in-out,
+      color var(--transition-fast) ease-in-out;
+  }
+
+  .theme-toggle__button:hover {
+    background-color: var(--color-bg-tertiary);
+    color: var(--color-text-primary);
+  }
+
+  .theme-toggle__button:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  .theme-toggle__button:focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  .theme-toggle__button:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  .theme-toggle__icon {
+    width: 24px;
+    height: 24px;
+    display: none;
+  }
+
+  /* Default: show moon (assumes light mode) */
+  .theme-toggle__icon--moon {
+    display: block;
+  }
+
+  /* When in dark mode: show sun to switch to light */
+  :global([data-theme="dark"]) .theme-toggle__icon--moon {
+    display: none;
+  }
+
+  :global([data-theme="dark"]) .theme-toggle__icon--sun {
+    display: block;
+  }
+</style>
+
+<script>
+  /**
+   * Theme Toggle Script
+   *
+   * Toggles between light and dark themes.
+   * Uses system preference as initial value if no stored preference exists.
+   * Stores preference in localStorage.
+   * Updates aria-label and aria-pressed for accessibility.
+   */
+
+  type Theme = 'light' | 'dark';
+
+  const THEME_STORAGE_KEY = 'theme';
+
+  /**
+   * Get the current system preference
+   */
+  function getSystemPreference(): Theme {
+    if (typeof window !== 'undefined' && window.matchMedia) {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    return 'light';
+  }
+
+  /**
+   * Get the stored theme from localStorage, or system preference if none stored
+   */
+  function getTheme(): Theme {
+    if (typeof localStorage !== 'undefined') {
+      const stored = localStorage.getItem(THEME_STORAGE_KEY);
+      if (stored === 'light' || stored === 'dark') {
+        return stored;
+      }
+    }
+    // No stored preference - use system preference
+    return getSystemPreference();
+  }
+
+  /**
+   * Store the theme in localStorage
+   */
+  function storeTheme(theme: Theme): void {
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem(THEME_STORAGE_KEY, theme);
+    }
+  }
+
+  /**
+   * Apply the theme to the document
+   */
+  function applyTheme(theme: Theme): void {
+    document.documentElement.setAttribute('data-theme', theme);
+  }
+
+  /**
+   * Update accessibility attributes on the toggle button
+   */
+  function updateButtonAccessibility(button: HTMLElement, theme: Theme): void {
+    const isDark = theme === 'dark';
+    // aria-pressed indicates whether dark mode is active
+    button.setAttribute('aria-pressed', isDark.toString());
+    // aria-label describes what the button will do when pressed
+    // In dark mode, pressing will switch to light; in light mode, pressing will switch to dark
+    const actionLabel = isDark ? 'Switch to light theme' : 'Switch to dark theme';
+    button.setAttribute('aria-label', actionLabel);
+  }
+
+  /**
+   * Initialize theme toggle
+   */
+  function initThemeToggle() {
+    const toggleButton = document.getElementById('theme-toggle-btn');
+    if (!toggleButton) return;
+
+    // Set initial accessibility state based on current theme
+    const currentTheme = getTheme();
+    updateButtonAccessibility(toggleButton, currentTheme);
+
+    /**
+     * Handle theme toggle button click
+     */
+    function handleToggle(): void {
+      const current = getTheme();
+      const next: Theme = current === 'light' ? 'dark' : 'light';
+
+      storeTheme(next);
+      applyTheme(next);
+      updateButtonAccessibility(toggleButton!, next);
+    }
+
+    toggleButton.addEventListener('click', handleToggle);
+  }
+
+  // Set up event listeners when DOM is ready
+  document.addEventListener('DOMContentLoaded', initThemeToggle);
+
+  // Handle Astro page transitions
+  document.addEventListener('astro:page-load', initThemeToggle);
+</script>

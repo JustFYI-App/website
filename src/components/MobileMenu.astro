@@ -1,0 +1,457 @@
+---
+/**
+ * MobileMenu Component
+ *
+ * A slide-out mobile menu with hamburger toggle button.
+ * Contains all navigation links, theme toggle, and language switcher.
+ * Uses minimal JavaScript for toggle functionality.
+ *
+ * Accessibility features:
+ * - aria-expanded on toggle button
+ * - aria-controls linking button to panel
+ * - role="dialog" and aria-modal="true" on panel
+ * - Escape key closes menu
+ * - Focus trap when menu is open
+ * - Focus management (moves to close button on open, returns to toggle on close)
+ */
+
+import { type LanguageCode, defaultLanguage } from '@i18n/languages';
+import { useTranslations } from '@i18n/utils';
+import Navigation from './Navigation.astro';
+import LanguageSwitcher from './LanguageSwitcher.astro';
+import ThemeToggle from './ThemeToggle.astro';
+
+interface Props {
+  /**
+   * Current language
+   */
+  lang?: LanguageCode;
+
+  /**
+   * Current page path for navigation active state
+   */
+  currentPath?: string;
+}
+
+const {
+  lang = defaultLanguage,
+  currentPath = '/',
+} = Astro.props;
+
+// Get translations
+const t = useTranslations(lang);
+
+// Generate unique IDs for accessibility
+const menuId = 'mobile-menu';
+const menuButtonId = 'mobile-menu-button';
+---
+
+<div class="mobile-menu">
+  <!-- Hamburger button -->
+  <button
+    id={menuButtonId}
+    type="button"
+    class="mobile-menu__toggle"
+    aria-expanded="false"
+    aria-controls={menuId}
+    aria-label={t('common.openMenu')}
+  >
+    <span class="mobile-menu__icon" aria-hidden="true">
+      <span class="mobile-menu__bar"></span>
+      <span class="mobile-menu__bar"></span>
+      <span class="mobile-menu__bar"></span>
+    </span>
+  </button>
+
+  <!-- Overlay backdrop -->
+  <div class="mobile-menu__backdrop" aria-hidden="true"></div>
+
+  <!-- Slide-out menu panel -->
+  <div
+    id={menuId}
+    class="mobile-menu__panel"
+    role="dialog"
+    aria-modal="true"
+    aria-label={t('common.navigationMenu')}
+  >
+    <div class="mobile-menu__header">
+      <span class="mobile-menu__title">{t('nav.home')}</span>
+      <button
+        type="button"
+        class="mobile-menu__close"
+        aria-label={t('common.closeMenu')}
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+
+    <div class="mobile-menu__content">
+      <!-- Navigation links -->
+      <nav aria-label={t('common.mainNavigation')}>
+        <Navigation lang={lang} currentPath={currentPath} vertical />
+      </nav>
+
+      <!-- Divider -->
+      <hr class="mobile-menu__divider" aria-hidden="true" />
+
+      <!-- Theme toggle and Language switcher row -->
+      <div class="mobile-menu__settings">
+        <div class="mobile-menu__setting-row">
+          <span class="mobile-menu__setting-label" id="theme-label">{t('common.theme')}</span>
+          <ThemeToggle lang={lang} />
+        </div>
+      </div>
+
+      <!-- Divider -->
+      <hr class="mobile-menu__divider" aria-hidden="true" />
+
+      <!-- Language switcher -->
+      <LanguageSwitcher lang={lang} currentPath={currentPath} variant="list" />
+    </div>
+  </div>
+</div>
+
+<style>
+  .mobile-menu {
+    display: none;
+  }
+
+  /* Only show on mobile */
+  @media (max-width: 1023px) {
+    .mobile-menu {
+      display: block;
+    }
+  }
+
+  /* Hamburger button */
+  .mobile-menu__toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--min-touch-target);
+    height: var(--min-touch-target);
+    padding: var(--space-2);
+    background: transparent;
+    border: none;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: background-color var(--transition-fast) ease-in-out;
+  }
+
+  .mobile-menu__toggle:hover {
+    background-color: var(--color-bg-tertiary);
+  }
+
+  .mobile-menu__toggle:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  .mobile-menu__toggle:focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  .mobile-menu__toggle:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  /* Hamburger icon */
+  .mobile-menu__icon {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 24px;
+    height: 18px;
+  }
+
+  .mobile-menu__bar {
+    display: block;
+    width: 100%;
+    height: 2px;
+    background-color: var(--color-text-primary);
+    border-radius: var(--radius-full);
+    transition: transform var(--transition) ease-in-out,
+      opacity var(--transition) ease-in-out,
+      background-color var(--transition-slow) ease-in-out;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mobile-menu__bar {
+      transition: background-color var(--transition-slow) ease-in-out;
+    }
+  }
+
+  /* Animated hamburger to X */
+  .mobile-menu__toggle[aria-expanded='true'] .mobile-menu__bar:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+  }
+
+  .mobile-menu__toggle[aria-expanded='true'] .mobile-menu__bar:nth-child(2) {
+    opacity: 0;
+  }
+
+  .mobile-menu__toggle[aria-expanded='true'] .mobile-menu__bar:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+  }
+
+  /* Backdrop overlay */
+  .mobile-menu__backdrop {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--transition) ease-in-out,
+      visibility var(--transition) ease-in-out;
+    z-index: 40;
+  }
+
+  /* Slide-out panel */
+  .mobile-menu__panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: min(320px, 85vw);
+    background-color: var(--color-bg-primary);
+    box-shadow: var(--shadow-xl);
+    transform: translateX(100%);
+    transition: transform var(--transition-slow) ease-in-out,
+      background-color var(--transition-slow) ease-in-out;
+    z-index: 50;
+    overflow-y: auto;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mobile-menu__panel {
+      transition: background-color var(--transition-slow) ease-in-out;
+    }
+  }
+
+  /* Show states - controlled by JavaScript */
+  .mobile-menu[data-open='true'] .mobile-menu__backdrop {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .mobile-menu[data-open='true'] .mobile-menu__panel {
+    transform: translateX(0);
+  }
+
+  /* Panel header */
+  .mobile-menu__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-4);
+    border-bottom: 1px solid var(--color-border);
+    transition: border-color var(--transition-slow) ease-in-out;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mobile-menu__header {
+      transition: none;
+    }
+  }
+
+  .mobile-menu__title {
+    font-size: var(--text-lg);
+    font-weight: var(--font-semibold);
+    color: var(--color-text-primary);
+  }
+
+  .mobile-menu__close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--min-touch-target);
+    height: var(--min-touch-target);
+    padding: var(--space-2);
+    background: transparent;
+    border: none;
+    border-radius: var(--radius-md);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: background-color var(--transition-fast) ease-in-out,
+      color var(--transition-fast) ease-in-out;
+  }
+
+  .mobile-menu__close:hover {
+    background-color: var(--color-bg-tertiary);
+    color: var(--color-text-primary);
+  }
+
+  .mobile-menu__close:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  .mobile-menu__close:focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  .mobile-menu__close:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  .mobile-menu__close svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  /* Panel content */
+  .mobile-menu__content {
+    padding: var(--space-4);
+  }
+
+  .mobile-menu__divider {
+    border: none;
+    border-top: 1px solid var(--color-border);
+    margin: var(--space-4) 0;
+    transition: border-color var(--transition-slow) ease-in-out;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mobile-menu__divider {
+      transition: none;
+    }
+  }
+
+  /* Settings section */
+  .mobile-menu__settings {
+    padding: var(--space-2) 0;
+  }
+
+  .mobile-menu__setting-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-2) var(--space-4);
+  }
+
+  .mobile-menu__setting-label {
+    font-size: var(--text-base);
+    font-weight: var(--font-medium);
+    color: var(--color-text-primary);
+  }
+
+  /* Prevent body scroll when menu is open */
+  :global(body.mobile-menu-open) {
+    overflow: hidden;
+  }
+</style>
+
+<script>
+  /**
+   * Mobile Menu Keyboard Navigation and Accessibility
+   *
+   * Features:
+   * - Toggle menu with Enter/Space on button
+   * - Close menu with Escape key
+   * - Focus trap when menu is open
+   * - Focus management (close button on open, toggle button on close)
+   * - Support for Astro page transitions
+   */
+
+  function initMobileMenu() {
+    const mobileMenu = document.querySelector('.mobile-menu') as HTMLElement | null;
+    const toggleButton = document.getElementById('mobile-menu-button');
+    const closeButton = document.querySelector('.mobile-menu__close');
+    const backdrop = document.querySelector('.mobile-menu__backdrop');
+    const panel = document.querySelector('.mobile-menu__panel');
+
+    if (!mobileMenu || !toggleButton) return;
+
+    function openMenu() {
+      mobileMenu!.dataset.open = 'true';
+      toggleButton!.setAttribute('aria-expanded', 'true');
+      document.body.classList.add('mobile-menu-open');
+
+      // Focus the close button when menu opens
+      const closeBtn = document.querySelector('.mobile-menu__close') as HTMLElement;
+      if (closeBtn) {
+        setTimeout(() => closeBtn.focus(), 100);
+      }
+    }
+
+    function closeMenu() {
+      mobileMenu!.dataset.open = 'false';
+      toggleButton!.setAttribute('aria-expanded', 'false');
+      document.body.classList.remove('mobile-menu-open');
+
+      // Return focus to toggle button
+      toggleButton!.focus();
+    }
+
+    // Toggle button click
+    toggleButton.addEventListener('click', () => {
+      const isOpen = mobileMenu.dataset.open === 'true';
+      if (isOpen) {
+        closeMenu();
+      } else {
+        openMenu();
+      }
+    });
+
+    // Close button click
+    closeButton?.addEventListener('click', closeMenu);
+
+    // Backdrop click
+    backdrop?.addEventListener('click', closeMenu);
+
+    // Escape key - close menu from anywhere
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && mobileMenu.dataset.open === 'true') {
+        e.preventDefault();
+        closeMenu();
+      }
+    });
+
+    // Close on navigation (when clicking a link)
+    panel?.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement;
+      if (target.tagName === 'A') {
+        closeMenu();
+      }
+    });
+
+    // Focus trap within the menu when open
+    panel?.addEventListener('keydown', (e) => {
+      if (e.key !== 'Tab') return;
+
+      const focusableElements = panel.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      );
+
+      if (focusableElements.length === 0) return;
+
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements[focusableElements.length - 1];
+
+      if (e.shiftKey) {
+        // Shift + Tab: go to last element if on first
+        if (document.activeElement === firstElement) {
+          e.preventDefault();
+          lastElement.focus();
+        }
+      } else {
+        // Tab: go to first element if on last
+        if (document.activeElement === lastElement) {
+          e.preventDefault();
+          firstElement.focus();
+        }
+      }
+    });
+  }
+
+  // Initialize on DOM ready
+  document.addEventListener('DOMContentLoaded', initMobileMenu);
+
+  // Re-initialize on Astro page transitions
+  document.addEventListener('astro:page-load', initMobileMenu);
+</script>

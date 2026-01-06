@@ -1,0 +1,201 @@
+---
+/**
+ * FAQAccordion Component
+ *
+ * Renders FAQ content with expandable accordion sections using
+ * the native HTML <details> element for zero-JavaScript functionality.
+ */
+
+interface FAQItem {
+  question: string;
+  answer: string;
+}
+
+interface FAQCategory {
+  name: string;
+  items: FAQItem[];
+}
+
+interface Props {
+  /**
+   * FAQ categories with their questions and answers
+   */
+  categories: FAQCategory[];
+}
+
+const { categories } = Astro.props;
+---
+
+<div class="faq-accordion">
+  {categories.map((category) => (
+    <section class="faq-category">
+      <h2 class="faq-category__title">{category.name}</h2>
+      <div class="faq-category__items">
+        {category.items.map((item) => (
+          <details class="faq-item">
+            <summary class="faq-item__question">
+              <span class="faq-item__question-text">{item.question}</span>
+              <span class="faq-item__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </span>
+            </summary>
+            <div class="faq-item__answer">
+              <Fragment set:html={item.answer} />
+            </div>
+          </details>
+        ))}
+      </div>
+    </section>
+  ))}
+</div>
+
+<style>
+  .faq-accordion {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-10);
+  }
+
+  /* Category styles */
+  .faq-category__title {
+    margin-bottom: var(--space-6);
+    padding-bottom: var(--space-3);
+    font-size: var(--text-xl);
+    color: var(--color-primary);
+    border-bottom: 2px solid var(--color-primary);
+  }
+
+  .faq-category__items {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  /* FAQ item (details element) */
+  .faq-item {
+    background-color: var(--color-bg-secondary);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+
+  /* Question (summary element) */
+  .faq-item__question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding: var(--space-4);
+    font-weight: var(--font-semibold);
+    color: var(--color-text-primary);
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+    transition: background-color var(--transition-fast) ease-in-out;
+  }
+
+  .faq-item__question::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-item__question::marker {
+    display: none;
+  }
+
+  .faq-item__question:hover {
+    background-color: var(--color-bg-tertiary);
+  }
+
+  .faq-item__question:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: -2px;
+  }
+
+  .faq-item__question:focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  .faq-item__question:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: -2px;
+  }
+
+  .faq-item__question-text {
+    flex: 1;
+    line-height: var(--leading-snug);
+  }
+
+  /* Icon */
+  .faq-item__icon {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    color: var(--color-primary);
+    transition: transform var(--transition) ease-in-out;
+  }
+
+  .faq-item__icon svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Rotate icon when open */
+  .faq-item[open] .faq-item__icon {
+    transform: rotate(180deg);
+  }
+
+  /* Answer */
+  .faq-item__answer {
+    padding: 0 var(--space-4) var(--space-4);
+    color: var(--color-text-secondary);
+    line-height: var(--leading-relaxed);
+  }
+
+  .faq-item__answer :global(p) {
+    margin-bottom: var(--space-3);
+  }
+
+  .faq-item__answer :global(p:last-child) {
+    margin-bottom: 0;
+  }
+
+  .faq-item__answer :global(ul),
+  .faq-item__answer :global(ol) {
+    margin-bottom: var(--space-3);
+    padding-left: var(--space-6);
+  }
+
+  .faq-item__answer :global(li) {
+    margin-bottom: var(--space-1);
+  }
+
+  .faq-item__answer :global(a) {
+    color: var(--color-primary);
+    text-decoration: underline;
+  }
+
+  .faq-item__answer :global(a:hover) {
+    color: var(--color-primary-dark);
+  }
+
+  .faq-item__answer :global(strong) {
+    color: var(--color-text-primary);
+  }
+
+  @media (max-width: 640px) {
+    .faq-category__title {
+      font-size: var(--text-lg);
+    }
+
+    .faq-item__question {
+      padding: var(--space-3);
+      font-size: var(--text-sm);
+    }
+
+    .faq-item__answer {
+      padding: 0 var(--space-3) var(--space-3);
+      font-size: var(--text-sm);
+    }
+  }
+</style>

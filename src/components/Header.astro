@@ -1,0 +1,162 @@
+---
+/**
+ * Header Component
+ *
+ * Site header with logo, navigation, theme toggle, and language switcher.
+ * Responsive: full navigation on desktop, hamburger menu on mobile.
+ */
+
+import { siteConfig } from '@config/site';
+import { type LanguageCode, defaultLanguage } from '@i18n/languages';
+import { getLocalizedPath } from '@i18n/utils';
+import Navigation from './Navigation.astro';
+import LanguageSwitcher from './LanguageSwitcher.astro';
+import ThemeToggle from './ThemeToggle.astro';
+import MobileMenu from './MobileMenu.astro';
+
+interface Props {
+  /**
+   * Current language
+   */
+  lang?: LanguageCode;
+
+  /**
+   * Current page path for navigation active state
+   */
+  currentPath?: string;
+}
+
+const {
+  lang = defaultLanguage,
+  currentPath = '/',
+} = Astro.props;
+
+// Get home path for logo link
+const homePath = getLocalizedPath('', lang);
+---
+
+<header class="header">
+  <div class="header__container container">
+    <!-- Logo / Site name -->
+    <a href={homePath} class="header__logo" aria-label={`${siteConfig.name} - Home`}>
+      <img src="/favicon.svg" alt="" class="header__logo-icon" aria-hidden="true" />
+      <span class="header__logo-text">{siteConfig.name}</span>
+    </a>
+
+    <!-- Desktop navigation -->
+    <div class="header__nav-desktop">
+      <Navigation lang={lang} currentPath={currentPath} />
+    </div>
+
+    <!-- Desktop actions (theme toggle and language switcher) -->
+    <div class="header__actions-desktop">
+      <ThemeToggle lang={lang} />
+      <LanguageSwitcher lang={lang} currentPath={currentPath} variant="dropdown" />
+    </div>
+
+    <!-- Mobile menu (hamburger) -->
+    <MobileMenu lang={lang} currentPath={currentPath} />
+  </div>
+</header>
+
+<style>
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    background-color: var(--color-bg-primary);
+    border-bottom: 1px solid var(--color-border);
+    transition: background-color var(--transition-slow) ease-in-out,
+      border-color var(--transition-slow) ease-in-out;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .header {
+      transition: none;
+    }
+  }
+
+  .header__container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    gap: var(--space-4);
+  }
+
+  /* Logo */
+  .header__logo {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    text-decoration: none;
+    color: var(--color-text-primary);
+    font-weight: var(--font-bold);
+    font-size: var(--text-xl);
+    transition: opacity var(--transition-fast) ease-in-out;
+    flex-shrink: 0;
+  }
+
+  .header__logo:hover {
+    opacity: 0.8;
+  }
+
+  .header__logo:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 4px;
+    border-radius: var(--radius);
+  }
+
+  .header__logo:focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  .header__logo:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 4px;
+    border-radius: var(--radius);
+  }
+
+  .header__logo-icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .header__logo-text {
+    color: var(--color-primary);
+  }
+
+  /* Desktop navigation */
+  .header__nav-desktop {
+    display: none;
+    flex: 1;
+    justify-content: center;
+  }
+
+  @media (min-width: 1024px) {
+    .header__nav-desktop {
+      display: flex;
+    }
+  }
+
+  /* Desktop actions (theme toggle and language switcher) */
+  .header__actions-desktop {
+    display: none;
+    align-items: center;
+    gap: var(--space-2);
+    flex-shrink: 0;
+  }
+
+  @media (min-width: 1024px) {
+    .header__actions-desktop {
+      display: flex;
+    }
+  }
+
+  /* Hide mobile menu on desktop */
+  @media (min-width: 1024px) {
+    .header :global(.mobile-menu) {
+      display: none;
+    }
+  }
+</style>

@@ -1,0 +1,210 @@
+---
+/**
+ * LegalLayout
+ *
+ * Layout for legal document pages like Privacy Policy and Terms of Service.
+ * Includes last updated date display and legal document styling.
+ * Implements mobile-first responsive design with proper typography.
+ */
+
+import BaseLayout from './BaseLayout.astro';
+import { type LanguageCode, defaultLanguage } from '@i18n/languages';
+import { useTranslations } from '@i18n/utils';
+
+interface Props {
+  /**
+   * Page title
+   */
+  title: string;
+
+  /**
+   * Page description for meta tags
+   */
+  description: string;
+
+  /**
+   * Current language code
+   */
+  lang?: LanguageCode;
+
+  /**
+   * Current page path (without language prefix)
+   */
+  pagePath?: string;
+
+  /**
+   * Last updated date
+   */
+  lastUpdated?: Date;
+
+  /**
+   * Whether to show table of contents
+   */
+  showToc?: boolean;
+}
+
+const {
+  title,
+  description,
+  lang = defaultLanguage,
+  pagePath = '',
+  lastUpdated,
+  showToc = false,
+} = Astro.props;
+
+// Get translations
+const t = useTranslations(lang);
+
+// Format the last updated date
+const formattedDate = lastUpdated
+  ? lastUpdated.toLocaleDateString(lang === 'en' ? 'en-US' : lang, {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    })
+  : null;
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  lang={lang}
+  pagePath={pagePath}
+>
+  <article class="legal-document section">
+    <div class="legal-document__container container content-layout">
+      <header class="legal-document__header">
+        <h1 class="legal-document__title">{title}</h1>
+        {formattedDate && (
+          <p class="legal-document__date">
+            <span class="legal-document__date-label">{t('pages.lastUpdated')}:</span>
+            <time datetime={lastUpdated?.toISOString().split('T')[0]}>
+              {formattedDate}
+            </time>
+          </p>
+        )}
+      </header>
+
+      <div class="legal-document__content legal-content prose">
+        <slot />
+      </div>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  /* Legal Document - Mobile First */
+  .legal-document__header {
+    margin-bottom: var(--space-6);
+    padding-bottom: var(--space-4);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .legal-document__title {
+    font-size: var(--text-2xl);
+    color: var(--color-primary);
+    margin-bottom: var(--space-3);
+  }
+
+  .legal-document__date {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+
+  .legal-document__date-label {
+    font-weight: var(--font-medium);
+  }
+
+  .legal-document__content {
+    line-height: var(--leading-relaxed);
+  }
+
+  /* Content styles for legal documents - Mobile */
+  .legal-document__content :global(h2) {
+    margin-top: var(--space-8);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--color-border);
+    font-size: var(--text-xl);
+  }
+
+  .legal-document__content :global(h2:first-child) {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: none;
+  }
+
+  .legal-document__content :global(h3) {
+    margin-top: var(--space-6);
+    font-size: var(--text-lg);
+  }
+
+  .legal-document__content :global(h4) {
+    margin-top: var(--space-5);
+    font-size: var(--text-base);
+    font-weight: var(--font-semibold);
+  }
+
+  .legal-document__content :global(p) {
+    margin-bottom: var(--space-4);
+  }
+
+  .legal-document__content :global(ul),
+  .legal-document__content :global(ol) {
+    margin-bottom: var(--space-4);
+    padding-left: var(--space-5);
+  }
+
+  .legal-document__content :global(li) {
+    margin-bottom: var(--space-2);
+  }
+
+  .legal-document__content :global(strong) {
+    color: var(--color-text-primary);
+  }
+
+  .legal-document__content :global(a) {
+    color: var(--color-primary);
+    text-decoration: underline;
+  }
+
+  .legal-document__content :global(a:hover) {
+    color: var(--color-primary-dark);
+  }
+
+  /* Tablet adjustments */
+  @media (min-width: 640px) {
+    .legal-document__header {
+      margin-bottom: var(--space-8);
+      padding-bottom: var(--space-6);
+    }
+
+    .legal-document__title {
+      font-size: var(--text-3xl);
+      margin-bottom: var(--space-4);
+    }
+
+    .legal-document__content :global(h2) {
+      margin-top: var(--space-10);
+      padding-top: var(--space-6);
+      font-size: var(--text-2xl);
+    }
+
+    .legal-document__content :global(h3) {
+      margin-top: var(--space-8);
+      font-size: var(--text-xl);
+    }
+
+    .legal-document__content :global(ul),
+    .legal-document__content :global(ol) {
+      padding-left: var(--space-6);
+    }
+  }
+
+  /* Desktop adjustments */
+  @media (min-width: 1024px) {
+    .legal-document__title {
+      font-size: var(--text-4xl);
+    }
+  }
+</style>

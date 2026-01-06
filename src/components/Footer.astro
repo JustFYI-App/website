@@ -1,0 +1,317 @@
+---
+/**
+ * Footer Component
+ *
+ * Site footer with copyright, legal links, GitHub link, and language indicator.
+ */
+
+import { siteConfig } from '@config/site';
+import { type LanguageCode, defaultLanguage, languageConfigs } from '@i18n/languages';
+import { getLocalizedPath, useTranslations } from '@i18n/utils';
+
+interface Props {
+  /**
+   * Current language
+   */
+  lang?: LanguageCode;
+}
+
+const { lang = defaultLanguage } = Astro.props;
+
+// Get translations
+const t = useTranslations(lang);
+
+// Get current language config
+const langConfig = languageConfigs[lang];
+
+// Current year for copyright
+const currentYear = new Date().getFullYear();
+
+// Footer navigation links
+const legalLinks = [
+  { href: getLocalizedPath('privacy-policy', lang), label: t('nav.privacyPolicy') },
+  { href: getLocalizedPath('terms-of-service', lang), label: t('nav.termsOfService') },
+];
+
+const resourceLinks = [
+  { href: getLocalizedPath('faq', lang), label: t('nav.faq') },
+  { href: getLocalizedPath('how-it-works', lang), label: t('nav.howItWorks') },
+  { href: getLocalizedPath('about', lang), label: t('nav.about') },
+  { href: getLocalizedPath('contact', lang), label: t('nav.contact') },
+];
+---
+
+<footer class="footer">
+  <div class="footer__container container">
+    <!-- Top section with logo and links -->
+    <div class="footer__top">
+      <!-- Brand column -->
+      <div class="footer__brand">
+        <a href={getLocalizedPath('', lang)} class="footer__logo">
+          <img src="/favicon.svg" alt="" class="footer__logo-icon" aria-hidden="true" />
+          <span>{siteConfig.name}</span>
+        </a>
+        <p class="footer__tagline">{t('footer.tagline')}</p>
+      </div>
+
+      <!-- Resources column -->
+      <div class="footer__column">
+        <h3 class="footer__heading">{t('footer.resources')}</h3>
+        <ul class="footer__links" role="list">
+          {resourceLinks.map((link) => (
+            <li>
+              <a href={link.href} class="footer__link">{link.label}</a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- Legal column -->
+      <div class="footer__column">
+        <h3 class="footer__heading">{t('footer.legal')}</h3>
+        <ul class="footer__links" role="list">
+          {legalLinks.map((link) => (
+            <li>
+              <a href={link.href} class="footer__link">{link.label}</a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- Open Source column -->
+      <div class="footer__column">
+        <h3 class="footer__heading">{t('footer.openSource')}</h3>
+        <ul class="footer__links" role="list">
+          <li>
+            <a
+              href={siteConfig.links.github}
+              class="footer__link footer__link--external"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <svg class="footer__github-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+              </svg>
+              GitHub
+            </a>
+          </li>
+          <li>
+            <a
+              href={siteConfig.contact.githubIssues}
+              class="footer__link footer__link--external"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Report an Issue
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Bottom section with copyright and language -->
+    <div class="footer__bottom">
+      <p class="footer__copyright">
+        &copy; {currentYear} {t('footer.copyright')}
+      </p>
+      <p class="footer__made-with">
+        {t('footer.madeWith')}
+      </p>
+      <div class="footer__language">
+        <svg class="footer__globe-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="2" y1="12" x2="22" y2="12"></line>
+          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+        </svg>
+        <span>{langConfig.nativeLabel}</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background-color: var(--color-bg-secondary);
+    border-top: 1px solid var(--color-border);
+    padding: var(--space-12) 0 var(--space-8);
+    margin-top: auto;
+  }
+
+  .footer__container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+  }
+
+  /* Top section layout */
+  .footer__top {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-8);
+  }
+
+  @media (min-width: 640px) {
+    .footer__top {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .footer__top {
+      grid-template-columns: 2fr repeat(3, 1fr);
+    }
+  }
+
+  /* Brand section */
+  .footer__brand {
+    max-width: 280px;
+  }
+
+  .footer__logo {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    text-decoration: none;
+    color: var(--color-text-primary);
+    font-weight: var(--font-bold);
+    font-size: var(--text-lg);
+    margin-bottom: var(--space-3);
+  }
+
+  .footer__logo:hover {
+    color: var(--color-primary);
+  }
+
+  .footer__logo:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 4px;
+    border-radius: var(--radius);
+  }
+
+  .footer__logo:focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  .footer__logo:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 4px;
+    border-radius: var(--radius);
+  }
+
+  .footer__logo-icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .footer__tagline {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+
+  /* Link columns */
+  .footer__column {
+    min-width: 0;
+  }
+
+  .footer__heading {
+    font-size: var(--text-sm);
+    font-weight: var(--font-semibold);
+    color: var(--color-text-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: var(--space-4);
+  }
+
+  .footer__links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .footer__links li {
+    margin: 0;
+  }
+
+  .footer__link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    transition: color var(--transition-fast) ease-in-out;
+  }
+
+  .footer__link:hover {
+    color: var(--color-primary);
+  }
+
+  .footer__link:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+    border-radius: var(--radius);
+  }
+
+  .footer__link:focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  .footer__link:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+    border-radius: var(--radius);
+  }
+
+  .footer__github-icon {
+    width: 16px;
+    height: 16px;
+  }
+
+  /* Bottom section */
+  .footer__bottom {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--color-border);
+    text-align: center;
+  }
+
+  @media (min-width: 640px) {
+    .footer__bottom {
+      flex-direction: row;
+      justify-content: space-between;
+      text-align: left;
+    }
+  }
+
+  .footer__copyright {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+
+  .footer__made-with {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+
+  .footer__language {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+
+  .footer__globe-icon {
+    width: 16px;
+    height: 16px;
+  }
+</style>

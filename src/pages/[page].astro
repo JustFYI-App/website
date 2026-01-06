@@ -1,0 +1,88 @@
+---
+/**
+ * Dynamic Page Route Handler (English)
+ *
+ * Handles all English content pages except the home page.
+ * Routes: /privacy-policy, /terms-of-service, /faq, /how-it-works, /about, /contact
+ */
+
+import { getCollection, type CollectionEntry } from 'astro:content';
+import { getPageSlugFromId } from '@content/helpers';
+import LegalLayout from '@layouts/LegalLayout.astro';
+import ContentLayout from '@layouts/ContentLayout.astro';
+import FAQLayout from '@layouts/FAQLayout.astro';
+import HowItWorksLayout from '@layouts/HowItWorksLayout.astro';
+import { defaultLanguage } from '@i18n/languages';
+
+// Generate static paths for all English pages (except home)
+export async function getStaticPaths() {
+  const pages = await getCollection('pages', ({ data }) => data.lang === 'en');
+
+  return pages
+    .filter((page) => {
+      const slug = getPageSlugFromId(page.id);
+      return slug !== 'home'; // Exclude home page
+    })
+    .map((page) => {
+      const slug = getPageSlugFromId(page.id);
+      return {
+        params: { page: slug },
+        props: { entry: page, slug },
+      };
+    });
+}
+
+interface Props {
+  entry: CollectionEntry<'pages'>;
+  slug: string;
+}
+
+const { entry, slug } = Astro.props;
+const { Content } = await entry.render();
+
+// Determine which layout to use based on page slug
+const isLegalPage = slug === 'privacy-policy' || slug === 'terms-of-service';
+const isFAQPage = slug === 'faq';
+const isHowItWorksPage = slug === 'how-it-works';
+---
+
+{isLegalPage ? (
+  <LegalLayout
+    title={entry.data.title}
+    description={entry.data.description}
+    lang={defaultLanguage}
+    pagePath={slug}
+    lastUpdated={entry.data.lastUpdated}
+    showToc={entry.data.showToc}
+  >
+    <Content />
+  </LegalLayout>
+) : isFAQPage ? (
+  <FAQLayout
+    title={entry.data.title}
+    description={entry.data.description}
+    lang={defaultLanguage}
+    pagePath={slug}
+    rawBody={entry.body}
+  >
+    <Content />
+  </FAQLayout>
+) : isHowItWorksPage ? (
+  <HowItWorksLayout
+    title={entry.data.title}
+    description={entry.data.description}
+    lang={defaultLanguage}
+    pagePath={slug}
+  >
+    <Content />
+  </HowItWorksLayout>
+) : (
+  <ContentLayout
+    title={entry.data.title}
+    description={entry.data.description}
+    lang={defaultLanguage}
+    pagePath={slug}
+  >
+    <Content />
+  </ContentLayout>
+)}

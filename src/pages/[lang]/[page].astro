@@ -1,0 +1,103 @@
+---
+/**
+ * Dynamic Page Route Handler (Localized)
+ *
+ * Handles all localized content pages for non-English languages.
+ * Routes: /{lang}/privacy-policy, /{lang}/terms-of-service, /{lang}/faq, etc.
+ */
+
+import { getCollection, type CollectionEntry } from 'astro:content';
+import { getPageSlugFromId } from '@content/helpers';
+import LegalLayout from '@layouts/LegalLayout.astro';
+import ContentLayout from '@layouts/ContentLayout.astro';
+import FAQLayout from '@layouts/FAQLayout.astro';
+import HowItWorksLayout from '@layouts/HowItWorksLayout.astro';
+import { type LanguageCode, languageCodes, defaultLanguage } from '@i18n/languages';
+
+// Generate static paths for all localized pages
+export async function getStaticPaths() {
+  const allPages = await getCollection('pages');
+  const paths: { params: { lang: string; page: string }; props: { entry: CollectionEntry<'pages'>; lang: LanguageCode; slug: string } }[] = [];
+
+  // Get English pages as the baseline
+  const englishPages = allPages.filter((page) => page.data.lang === 'en');
+
+  // For each non-English language
+  for (const lang of languageCodes.filter((l) => l !== defaultLanguage)) {
+    // Get pages for this language
+    const langPages = allPages.filter((page) => page.data.lang === lang);
+
+    for (const enPage of englishPages) {
+      const slug = getPageSlugFromId(enPage.id);
+
+      // Skip home page (handled by [lang]/index.astro)
+      if (slug === 'home') continue;
+
+      // Try to find localized version
+      const localizedPage = langPages.find((p) => getPageSlugFromId(p.id) === slug);
+
+      paths.push({
+        params: { lang, page: slug },
+        props: { entry: localizedPage || enPage, lang: lang as LanguageCode, slug },
+      });
+    }
+  }
+
+  return paths;
+}
+
+interface Props {
+  entry: CollectionEntry<'pages'>;
+  lang: LanguageCode;
+  slug: string;
+}
+
+const { entry, lang, slug } = Astro.props;
+const { Content } = await entry.render();
+
+// Determine which layout to use based on page slug
+const isLegalPage = slug === 'privacy-policy' || slug === 'terms-of-service';
+const isFAQPage = slug === 'faq';
+const isHowItWorksPage = slug === 'how-it-works';
+---
+
+{isLegalPage ? (
+  <LegalLayout
+    title={entry.data.title}
+    description={entry.data.description}
+    lang={lang}
+    pagePath={slug}
+    lastUpdated={entry.data.lastUpdated}
+    showToc={entry.data.showToc}
+  >
+    <Content />
+  </LegalLayout>
+) : isFAQPage ? (
+  <FAQLayout
+    title={entry.data.title}
+    description={entry.data.description}
+    lang={lang}
+    pagePath={slug}
+    rawBody={entry.body}
+  >
+    <Content />
+  </FAQLayout>
+) : isHowItWorksPage ? (
+  <HowItWorksLayout
+    title={entry.data.title}
+    description={entry.data.description}
+    lang={lang}
+    pagePath={slug}
+  >
+    <Content />
+  </HowItWorksLayout>
+) : (
+  <ContentLayout
+    title={entry.data.title}
+    description={entry.data.description}
+    lang={lang}
+    pagePath={slug}
+  >
+    <Content />
+  </ContentLayout>
+)}

@@ -1,0 +1,35 @@
+---
+/**
+ * Localized Home Page Route Handler
+ *
+ * Handles home pages for non-English languages.
+ * Routes: /de, /es, /fr, /pt
+ */
+
+import BaseLayout from '@layouts/BaseLayout.astro';
+import HomePage from '@components/HomePage.astro';
+import { type LanguageCode, languageCodes, defaultLanguage } from '@i18n/languages';
+import { useTranslations } from '@i18n/utils';
+
+// Generate static paths for all non-English home pages
+export function getStaticPaths() {
+  return languageCodes
+    .filter((lang) => lang !== defaultLanguage)
+    .map((lang) => ({
+      params: { lang },
+      props: { lang },
+    }));
+}
+
+const { lang } = Astro.props as { lang: LanguageCode };
+const t = useTranslations(lang);
+---
+
+<BaseLayout
+  title=""
+  description={t('meta.homeDescription')}
+  lang={lang}
+  pagePath=""
+>
+  <HomePage lang={lang} />
+</BaseLayout>

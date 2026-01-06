@@ -1,0 +1,350 @@
+---
+/**
+ * HomePage Component
+ *
+ * Shared home page content for all language variants.
+ * Eliminates duplication between index.astro and [lang]/index.astro.
+ */
+
+import { Image } from 'astro:assets';
+import { siteConfig } from '@config/site';
+import { type LanguageCode } from '@i18n/languages';
+import { useTranslations, getLocalizedPath } from '@i18n/utils';
+import PlayStoreIcon from '@components/icons/PlayStoreIcon.astro';
+import AppStoreIcon from '@components/icons/AppStoreIcon.astro';
+import AnonymousIdIcon from '@components/icons/AnonymousIdIcon.astro';
+import BluetoothIcon from '@components/icons/BluetoothIcon.astro';
+import PrivacyShieldIcon from '@components/icons/PrivacyShieldIcon.astro';
+import GitHubIcon from '@components/icons/GitHubIcon.astro';
+
+interface Props {
+  lang: LanguageCode;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const screenshotCount = 5;
+const screenshots = Array.from({ length: screenshotCount }, (_, i) => i + 1);
+
+// Import all screenshot images for optimization
+const lightScreenshots = import.meta.glob<{ default: ImageMetadata }>(
+  '/src/assets/screenshots/light/**/*.webp',
+  { eager: true }
+);
+const darkScreenshots = import.meta.glob<{ default: ImageMetadata }>(
+  '/src/assets/screenshots/dark/**/*.webp',
+  { eager: true }
+);
+
+// Helper to get screenshot image
+function getScreenshot(theme: 'light' | 'dark', langCode: string, num: number): ImageMetadata | null {
+  const screenshots = theme === 'light' ? lightScreenshots : darkScreenshots;
+  const path = `/src/assets/screenshots/${theme}/${langCode}/${num}.webp`;
+  return screenshots[path]?.default || null;
+}
+---
+
+<!-- Hero Section -->
+<section class="hero section">
+  <div class="hero__container container hero-layout">
+    <h1 class="hero__title">{t('home.heroTitle')}</h1>
+    <p class="hero__subtitle">{t('home.heroSubtitle')}</p>
+    <p class="hero__description">{t('home.heroDescription')}</p>
+    <div class="hero__cta cta-group">
+      {siteConfig.links.playStore && siteConfig.links.playStore !== '#' ? (
+        <a href={siteConfig.links.playStore} class="btn btn-primary">
+          <PlayStoreIcon />
+          {t('common.playStore')}
+        </a>
+      ) : (
+        <span class="btn btn-primary btn--disabled" aria-label={`${t('common.playStore')} - ${t('common.comingSoon')}`}>
+          <PlayStoreIcon />
+          {t('common.playStore')}
+        </span>
+      )}
+      {siteConfig.links.appStore && siteConfig.links.appStore !== '#' ? (
+        <a href={siteConfig.links.appStore} class="btn btn-outline">
+          <AppStoreIcon />
+          {t('common.appStore')}
+        </a>
+      ) : (
+        <span class="btn btn-outline btn--disabled" aria-label={`${t('common.appStore')} - ${t('common.comingSoon')}`}>
+          <AppStoreIcon />
+          {t('common.appStore')}
+        </span>
+      )}
+    </div>
+    <p class="hero__coming-soon">{t('common.comingSoon')}</p>
+  </div>
+</section>
+
+<!-- Features Section -->
+<section class="features section" id="features">
+  <div class="features__container container">
+    <h2 class="features__title text-center">{t('home.featuresTitle')}</h2>
+    <div class="feature-grid">
+      <!-- Feature 1: Anonymous ID -->
+      <article class="card feature-card">
+        <div class="card__icon feature-card__icon">
+          <AnonymousIdIcon />
+        </div>
+        <h3 class="card__title feature-card__title">{t('home.feature1Title')}</h3>
+        <p class="card__description feature-card__description">{t('home.feature1Description')}</p>
+      </article>
+
+      <!-- Feature 2: Bluetooth LE -->
+      <article class="card feature-card">
+        <div class="card__icon feature-card__icon">
+          <BluetoothIcon />
+        </div>
+        <h3 class="card__title feature-card__title">{t('home.feature2Title')}</h3>
+        <p class="card__description feature-card__description">{t('home.feature2Description')}</p>
+      </article>
+
+      <!-- Feature 3: Privacy First -->
+      <article class="card feature-card">
+        <div class="card__icon feature-card__icon">
+          <PrivacyShieldIcon />
+        </div>
+        <h3 class="card__title feature-card__title">{t('home.feature3Title')}</h3>
+        <p class="card__description feature-card__description">{t('home.feature3Description')}</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- App Screenshots -->
+<section class="screenshot-section section section-bg--primary">
+  <div class="screenshot-section__container">
+    <div class="screenshot-carousel">
+      {screenshots.map((num) => {
+        const lightImg = getScreenshot('light', lang, num);
+        const darkImg = getScreenshot('dark', lang, num);
+        return (
+          <div class="screenshot-device">
+            {lightImg && (
+              <Image
+                src={lightImg}
+                alt={`${t('home.screenshotAlt')} ${num}`}
+                class="screenshot-image screenshot-image--light"
+                loading="lazy"
+                width={300}
+                height={600}
+              />
+            )}
+            {darkImg && (
+              <Image
+                src={darkImg}
+                alt={`${t('home.screenshotAlt')} ${num}`}
+                class="screenshot-image screenshot-image--dark"
+                loading="lazy"
+                width={300}
+                height={600}
+              />
+            )}
+          </div>
+        );
+      })}
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section section">
+  <div class="cta-section__container container hero-layout">
+    <h2 class="cta-section__title">{t('home.ctaTitle')}</h2>
+    <p class="cta-section__description">{t('home.ctaDescription')}</p>
+    <div class="cta-section__buttons cta-group">
+      <a href={siteConfig.links.github} class="btn btn-primary">
+        <GitHubIcon />
+        {t('footer.openSource')}
+      </a>
+      <a href={getLocalizedPath('how-it-works', lang)} class="btn btn-outline">
+        {t('common.learnMore')}
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Hero Section - Mobile First */
+  .hero {
+    text-align: center;
+    background: linear-gradient(180deg, var(--color-bg-secondary) 0%, var(--color-bg-primary) 100%);
+  }
+
+  .hero__title {
+    font-size: var(--text-3xl);
+    color: var(--color-primary);
+    margin-bottom: var(--space-3);
+  }
+
+  .hero__subtitle {
+    font-size: var(--text-lg);
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-3);
+  }
+
+  .hero__description {
+    font-size: var(--text-base);
+    color: var(--color-text-muted);
+    max-width: 600px;
+    margin: 0 auto var(--space-6);
+  }
+
+  .hero__coming-soon {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    font-style: italic;
+    margin-top: var(--space-4);
+  }
+
+  /* Tablet adjustments */
+  @media (min-width: 640px) {
+    .hero__title {
+      font-size: var(--text-4xl);
+      margin-bottom: var(--space-4);
+    }
+
+    .hero__subtitle {
+      font-size: var(--text-xl);
+      margin-bottom: var(--space-4);
+    }
+
+    .hero__description {
+      font-size: var(--text-lg);
+      margin-bottom: var(--space-8);
+    }
+  }
+
+  /* Desktop adjustments */
+  @media (min-width: 1024px) {
+    .hero__title {
+      font-size: var(--text-5xl);
+    }
+  }
+
+  /* Features Section */
+  .features__title {
+    margin-bottom: var(--space-8);
+  }
+
+  @media (min-width: 640px) {
+    .features__title {
+      margin-bottom: var(--space-10);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .features__title {
+      margin-bottom: var(--space-12);
+    }
+  }
+
+  /* Feature Card - extends .card from global.css */
+  .feature-card {
+    text-align: center;
+  }
+
+  .feature-card__icon {
+    margin: 0 auto var(--space-4);
+  }
+
+  /* Screenshot Section */
+  .screenshot-section__container {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .screenshot-carousel {
+    display: flex;
+    gap: var(--space-4);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding: var(--space-4) var(--space-4);
+  }
+
+  .screenshot-carousel::-webkit-scrollbar {
+    display: none;
+  }
+
+  .screenshot-device {
+    flex: 0 0 auto;
+    width: 220px;
+    border-radius: var(--radius-3xl);
+    overflow: hidden;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    scroll-snap-align: center;
+  }
+
+  .screenshot-image {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* Theme-based screenshot visibility */
+  /* Default (light mode): show light, hide dark */
+  .screenshot-image--light {
+    display: block;
+  }
+
+  .screenshot-image--dark {
+    display: none;
+  }
+
+  /* Dark mode: show dark, hide light */
+  :global([data-theme="dark"]) .screenshot-image--light {
+    display: none;
+  }
+
+  :global([data-theme="dark"]) .screenshot-image--dark {
+    display: block;
+  }
+
+  /* Tablet - larger screenshots and more gap */
+  @media (min-width: 640px) {
+    .screenshot-carousel {
+      gap: var(--space-6);
+      padding: var(--space-6) var(--space-8);
+      justify-content: center;
+    }
+
+    .screenshot-device {
+      width: 260px;
+    }
+  }
+
+  /* Desktop - even larger screenshots */
+  @media (min-width: 1024px) {
+    .screenshot-carousel {
+      gap: var(--space-8);
+      padding: var(--space-8) var(--space-12);
+    }
+
+    .screenshot-device {
+      width: 280px;
+    }
+  }
+
+  /* CTA Section */
+  .cta-section__title {
+    margin-bottom: var(--space-4);
+  }
+
+  .cta-section__description {
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-6);
+  }
+
+  @media (min-width: 640px) {
+    .cta-section__description {
+      font-size: var(--text-lg);
+      margin-bottom: var(--space-8);
+    }
+  }
+</style>

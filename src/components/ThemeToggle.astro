@@ -31,7 +31,6 @@ const t = useTranslations(lang);
 
 <div class="theme-toggle">
   <button
-    id="theme-toggle-btn"
     type="button"
     class="theme-toggle__button"
     aria-label={t('common.switchToDark')}
@@ -209,12 +208,22 @@ const t = useTranslations(lang);
    * Initialize theme toggle
    */
   function initThemeToggle() {
-    const toggleButton = document.getElementById('theme-toggle-btn');
-    if (!toggleButton) return;
+    const toggleButtons = document.querySelectorAll('.theme-toggle__button');
+    if (toggleButtons.length === 0) return;
 
     // Set initial accessibility state based on current theme
     const currentTheme = getTheme();
-    updateButtonAccessibility(toggleButton, currentTheme);
+
+    /**
+     * Update all toggle buttons' accessibility attributes
+     */
+    function updateAllButtons(theme: Theme): void {
+      toggleButtons.forEach((button) => {
+        updateButtonAccessibility(button as HTMLElement, theme);
+      });
+    }
+
+    updateAllButtons(currentTheme);
 
     /**
      * Handle theme toggle button click
@@ -225,10 +234,12 @@ const t = useTranslations(lang);
 
       storeTheme(next);
       applyTheme(next);
-      updateButtonAccessibility(toggleButton!, next);
+      updateAllButtons(next);
     }
 
-    toggleButton.addEventListener('click', handleToggle);
+    toggleButtons.forEach((button) => {
+      button.addEventListener('click', handleToggle);
+    });
   }
 
   // Set up event listeners when DOM is ready

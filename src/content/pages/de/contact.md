@@ -27,9 +27,9 @@ Um Ihnen schnell helfen zu können, geben Sie bitte an:
 
 Wir sind ein kleines Team, das an Just FYI als Gemeinschaftsprojekt arbeitet. Bitte rechnen Sie mit:
 
-- **Allgemeine Anfragen**: 2-3 Werktage
-- **Fehlerberichte**: 1-2 Werktage für die erste Antwort
-- **Sicherheitsbedenken**: Innerhalb von 24 Stunden
+- **Allgemeine Anfragen**: 5-7 Werktage
+- **Fehlerberichte**: 3-5 Werktage für die erste Antwort
+- **Sicherheitsbedenken**: Innerhalb von 48 Stunden
 
 Wir priorisieren sicherheitsbezogene Kommunikation und werden so schnell wie möglich darauf antworten.
 
@@ -75,7 +75,7 @@ Senden Sie uns stattdessen direkt eine E-Mail an **support@justfyi.app** mit:
 
 Wir nehmen Sicherheit ernst und werden:
 
-- Ihren Bericht innerhalb von 24 Stunden bestätigen
+- Ihren Bericht innerhalb von 48 Stunden bestätigen
 - Sie über unseren Fortschritt informieren
 - Sie in unseren Release-Notizen erwähnen (falls Sie es wünschen)
 

@@ -122,6 +122,6 @@ Encontrou um bug ou tem uma sugestao? Abra um issue no GitHub. Revisamos todos o
 Tem perguntas ou quer saber mais? Entre em contato conosco:
 
 - **E-mail**: support@justfyi.app
-- **GitHub**: [github.com/niceforo1/Just FYI](https://github.com/JustFYI-App/Just FYI)
+- **GitHub**: [github.com/JustFYI-App/JustFYI](https://github.com/JustFYI-App/JustFYI)
 
 Esperamos construir um futuro mais seguro e privado juntos.

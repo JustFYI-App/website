@@ -27,9 +27,9 @@ Pour vous aider rapidement, veuillez inclure :
 
 Nous sommes une petite equipe travaillant sur Just FYI en tant que projet communautaire. Veuillez prevoir :
 
-- **Demandes generales** : 2-3 jours ouvrables
-- **Rapports de bugs** : 1-2 jours ouvrables pour la reponse initiale
-- **Preoccupations de securite** : Sous 24 heures
+- **Demandes generales** : 5-7 jours ouvrables
+- **Rapports de bugs** : 3-5 jours ouvrables pour la reponse initiale
+- **Preoccupations de securite** : Sous 48 heures
 
 Nous donnons la priorite aux communications liees a la securite et y repondrons aussi rapidement que possible.
 
@@ -75,7 +75,7 @@ Au lieu de cela, envoyez-nous un e-mail directement a **support@justfyi.app** av
 
 Nous prenons la securite au serieux et nous :
 
-- Accuserons reception de votre rapport sous 24 heures
+- Accuserons reception de votre rapport sous 48 heures
 - Vous tiendrons informe de notre progression
 - Vous crediterons dans nos notes de version (si vous le souhaitez)
 

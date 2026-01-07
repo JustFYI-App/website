@@ -27,9 +27,9 @@ To help us assist you quickly, please include:
 
 We are a small team working on Just FYI as a community project. Please allow:
 
-- **General inquiries**: 2-3 business days
-- **Bug reports**: 1-2 business days for initial response
-- **Security concerns**: Within 24 hours
+- **General inquiries**: 5-7 business days
+- **Bug reports**: 3-5 business days for initial response
+- **Security concerns**: Within 48 hours
 
 We prioritize security-related communications and will respond to those as quickly as possible.
 
@@ -75,7 +75,7 @@ Instead, email us directly at **support@justfyi.app** with:
 
 We take security seriously and will:
 
-- Acknowledge your report within 24 hours
+- Acknowledge your report within 48 hours
 - Keep you informed of our progress
 - Credit you in our release notes (if you wish)
 

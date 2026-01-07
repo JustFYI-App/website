@@ -27,9 +27,9 @@ Para ayudarte rapidamente, por favor incluye:
 
 Somos un equipo pequeno trabajando en Just FYI como proyecto comunitario. Por favor permite:
 
-- **Consultas generales**: 2-3 dias habiles
-- **Reportes de errores**: 1-2 dias habiles para respuesta inicial
-- **Preocupaciones de seguridad**: Dentro de 24 horas
+- **Consultas generales**: 5-7 dias habiles
+- **Reportes de errores**: 3-5 dias habiles para respuesta inicial
+- **Preocupaciones de seguridad**: Dentro de 48 horas
 
 Priorizamos las comunicaciones relacionadas con la seguridad y responderemos a ellas lo mas rapido posible.
 
@@ -37,7 +37,7 @@ Priorizamos las comunicaciones relacionadas con la seguridad y responderemos a e
 
 Para problemas tecnicos, reportes de errores o sugerencias de funciones, usa nuestros Issues de GitHub:
 
-**GitHub Issues**: [github.com/niceforo1/Just FYI/issues](https://github.com/JustFYI-App/Just FYI/issues)
+**GitHub Issues**: [github.com/JustFYI-App/JustFYI/issues](https://github.com/JustFYI-App/JustFYI/issues)
 
 ### Reportar un error
 
@@ -75,7 +75,7 @@ En su lugar, envianos un correo electronico directamente a **support@justfyi.app
 
 Tomamos la seguridad en serio y:
 
-- Confirmaremos tu reporte dentro de 24 horas
+- Confirmaremos tu reporte dentro de 48 horas
 - Te mantendremos informado de nuestro progreso
 - Te acreditaremos en nuestras notas de lanzamiento (si lo deseas)
 
@@ -88,7 +88,7 @@ Interesado en contribuir a Just FYI? Damos la bienvenida a:
 - **Documentacion**: Mejora nuestra documentacion y guias
 - **Pruebas**: Ayudanos a encontrar y corregir problemas
 
-Visita nuestro [repositorio de GitHub](https://github.com/JustFYI-App/Just FYI) para empezar.
+Visita nuestro [repositorio de GitHub](https://github.com/JustFYI-App/JustFYI) para empezar.
 
 ## Comunidad
 

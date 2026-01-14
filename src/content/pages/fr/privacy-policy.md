@@ -82,15 +82,13 @@ Vous pouvez consulter toutes les donnees stockees sur votre appareil dans l'appl
 
 ### Supprimer vos donnees
 
-Vous pouvez supprimer toutes vos donnees en :
+Vous pouvez supprimer toutes vos donnees depuis les Parametres de l'application. En utilisant l'option "Supprimer le compte", toutes vos donnees seront supprimees de nos serveurs et vos donnees locales seront egalement supprimees de votre appareil.
 
-- Effacant votre historique d'interactions dans les parametres de l'application
-- Generant un nouvel identifiant anonyme
-- Desinstallant l'application
+Vous pouvez egalement envoyer votre identifiant anonyme par e-mail a support@justfyi.app pour demander la suppression de vos donnees. Cependant, cela n'est pas recommande car cela creerait un enregistrement liant votre adresse e-mail a votre identifiant anonyme.
 
 ### Portabilite des donnees
 
-Vous pouvez exporter vos donnees d'interaction via la fonction d'exportation de donnees de l'application. Comme nous ne stockons que des donnees anonymisees, les donnees exportees contiendront votre historique d'interactions sans identifiants personnels.
+Vous pouvez exporter toutes les donnees enregistrees a votre sujet via la fonction d'exportation de donnees dans les Parametres de l'application. Comme nous ne stockons que des donnees anonymisees, les donnees exportees contiendront votre historique d'interactions sans identifiants personnels.
 
 ### Retrait du consentement
 

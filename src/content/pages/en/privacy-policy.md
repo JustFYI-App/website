@@ -82,15 +82,13 @@ You can view all data stored on your device within the app at any time.
 
 ### Delete Your Data
 
-You can delete all your data by:
+You can delete all your data from the app's Settings. Using the "Delete Account" option will remove all your data from our servers and also delete your local data from your device.
 
-- Clearing your interaction history in the app settings
-- Generating a new anonymous ID
-- Uninstalling the app
+Alternatively, you can email your anonymous ID to support@justfyi.app to request data deletion. However, this is not recommended as it would create a record linking your email address to your anonymous ID.
 
 ### Data Portability
 
-You can export your interaction data through the app's data export feature. Since we only store anonymized data, exported data will contain your interaction history without personal identifiers.
+You can export all data saved about you through the app's data export feature in Settings. Since we only store anonymized data, the exported data will contain your interaction history without personal identifiers.
 
 ### Withdraw Consent
 

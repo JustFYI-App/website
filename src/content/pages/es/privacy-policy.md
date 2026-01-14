@@ -82,15 +82,13 @@ Puedes ver todos los datos almacenados en tu dispositivo dentro de la app en cua
 
 ### Eliminar tus datos
 
-Puedes eliminar todos tus datos:
+Puedes eliminar todos tus datos desde la Configuracion de la app. Usando la opcion "Eliminar Cuenta" se eliminaran todos tus datos de nuestros servidores y tambien se borraran tus datos locales de tu dispositivo.
 
-- Limpiando tu historial de interacciones en la configuracion de la app
-- Generando un nuevo ID Anonimo
-- Desinstalando la app
+Alternativamente, puedes enviar tu ID anonimo por correo electronico a support@justfyi.app para solicitar la eliminacion de datos. Sin embargo, esto no se recomienda ya que crearia un registro que vincula tu direccion de correo electronico con tu ID anonimo.
 
 ### Portabilidad de datos
 
-Puedes exportar tus datos de interaccion a traves de la funcion de exportacion de datos de la app. Como solo almacenamos datos anonimizados, los datos exportados contendran tu historial de interacciones sin identificadores personales.
+Puedes exportar todos los datos guardados sobre ti a traves de la funcion de exportacion de datos en la Configuracion de la app. Como solo almacenamos datos anonimizados, los datos exportados contendran tu historial de interacciones sin identificadores personales.
 
 ### Retirar el consentimiento
 

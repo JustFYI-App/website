@@ -82,15 +82,13 @@ Voce pode visualizar todos os dados armazenados no seu dispositivo dentro do apl
 
 ### Excluir seus dados
 
-Voce pode excluir todos os seus dados:
+Voce pode excluir todos os seus dados nas Configuracoes do aplicativo. Usando a opcao "Excluir Conta", todos os seus dados serao removidos de nossos servidores e seus dados locais tambem serao excluidos do seu dispositivo.
 
-- Limpando seu historico de interacoes nas configuracoes do aplicativo
-- Gerando um novo ID Anonimo
-- Desinstalando o aplicativo
+Alternativamente, voce pode enviar seu ID anonimo por e-mail para support@justfyi.app para solicitar a exclusao dos dados. No entanto, isso nao e recomendado, pois criaria um registro vinculando seu endereco de e-mail ao seu ID anonimo.
 
 ### Portabilidade de dados
 
-Voce pode exportar seus dados de interacao atraves da funcao de exportacao de dados do aplicativo. Como armazenamos apenas dados anonimizados, os dados exportados conterao seu historico de interacoes sem identificadores pessoais.
+Voce pode exportar todos os dados salvos sobre voce atraves da funcao de exportacao de dados nas Configuracoes do aplicativo. Como armazenamos apenas dados anonimizados, os dados exportados conterao seu historico de interacoes sem identificadores pessoais.
 
 ### Retirar consentimento
 

@@ -82,15 +82,13 @@ Sie können alle auf Ihrem Gerät gespeicherten Daten jederzeit in der App einse
 
 ### Löschung Ihrer Daten
 
-Sie können alle Ihre Daten löschen durch:
+Sie können alle Ihre Daten in den Einstellungen der App löschen. Mit der Option "Konto löschen" werden alle Ihre Daten von unseren Servern entfernt und auch Ihre lokalen Daten von Ihrem Gerät gelöscht.
 
-- Löschen Ihres Interaktionsverlaufs in den App-Einstellungen
-- Generieren einer neuen anonymen ID
-- Deinstallieren der App
+Alternativ können Sie Ihre anonyme ID per E-Mail an support@justfyi.app senden, um die Löschung Ihrer Daten zu beantragen. Dies wird jedoch nicht empfohlen, da dadurch eine Verbindung zwischen Ihrer E-Mail-Adresse und Ihrer anonymen ID hergestellt wird.
 
 ### Datenportabilität
 
-Sie können Ihre Interaktionsdaten über die Datenexportfunktion der App exportieren. Da wir nur anonymisierte Daten speichern, enthalten exportierte Daten Ihren Interaktionsverlauf ohne persönliche Kennungen.
+Sie können alle über Sie gespeicherten Daten über die Datenexportfunktion in den Einstellungen der App exportieren. Da wir nur anonymisierte Daten speichern, enthalten die exportierten Daten Ihren Interaktionsverlauf ohne persönliche Kennungen.
 
 ### Widerruf der Einwilligung
 

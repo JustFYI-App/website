@@ -209,9 +209,13 @@ export const subscribe = onRequest(
         return;
       }
 
-      // Sanitize city (trim and limit length)
+      // Sanitize city (trim, remove non-printable chars, limit length)
+      // Allow letters, numbers, spaces, hyphens, apostrophes, periods, commas
       const sanitizedCity = city && typeof city === "string"
-        ? city.trim().slice(0, 100)
+        ? city.trim()
+          .replace(/[^\p{L}\p{N}\s\-'.,]/gu, "") // Keep letters, numbers, basic punctuation
+          .replace(/\s+/g, " ") // Normalize multiple spaces
+          .slice(0, 100)
         : "";
 
       // Store subscriber

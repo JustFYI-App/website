@@ -18,4 +18,8 @@ dist/
 
 # Astro
 .astro/
+
+# AI tools
 /CLAUDE.md
+/agent-os
+/.claude

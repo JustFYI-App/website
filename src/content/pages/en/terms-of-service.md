@@ -3,7 +3,7 @@ title: "Terms of Service"
 description: "Review the Just FYI Terms of Service for using our anonymous contact tracing app."
 lang: en
 pageSlug: "terms-of-service"
-lastUpdated: 2025-01-03
+lastUpdated: 2026-01-17
 showToc: true
 order: 91
 ---

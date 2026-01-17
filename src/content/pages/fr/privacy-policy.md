@@ -3,7 +3,7 @@ title: "Politique de confidentialite"
 description: "Lisez la Politique de confidentialite de Just FYI pour comprendre comment nous protegeons vos donnees et votre vie privee."
 lang: fr
 pageSlug: "privacy-policy"
-lastUpdated: 2025-01-03
+lastUpdated: 2026-01-17
 showToc: true
 order: 90
 ---

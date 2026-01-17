@@ -3,7 +3,7 @@ title: "Nutzungsbedingungen"
 description: "Lesen Sie die Just FYI-Nutzungsbedingungen für die Verwendung unserer anonymen Kontaktverfolgungsapp."
 lang: de
 pageSlug: "terms-of-service"
-lastUpdated: 2025-01-03
+lastUpdated: 2026-01-17
 showToc: true
 order: 91
 ---

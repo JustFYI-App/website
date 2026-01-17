@@ -3,7 +3,7 @@ title: "Datenschutzerklärung"
 description: "Lesen Sie die Just FYI-Datenschutzerklärung, um zu verstehen, wie wir Ihre Daten und Privatsphäre schützen."
 lang: de
 pageSlug: "privacy-policy"
-lastUpdated: 2025-01-03
+lastUpdated: 2026-01-17
 showToc: true
 order: 90
 ---

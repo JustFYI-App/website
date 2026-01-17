@@ -95,7 +95,6 @@ website/
 │       └── global.css       # Global styles
 ├── functions/               # Firebase Cloud Functions
 │   ├── src/                 # Function source code
-│   ├── FIREBASE_SETUP.md    # Firebase setup instructions
 │   └── README.md            # Function API documentation
 ├── astro.config.mjs         # Astro configuration
 ├── firebase.json            # Firebase configuration
@@ -116,16 +115,6 @@ The website includes an email subscription system for collecting early access si
 - **Backend:** Firebase Cloud Functions (Node.js 20, TypeScript)
 - **Database:** Firestore (EU region - `eur3`)
 - **Spam Protection:** Honeypot field, rate limiting (5 req/IP/hour), IP hashing
-
-### Firebase Project Setup
-
-See [`functions/FIREBASE_SETUP.md`](functions/FIREBASE_SETUP.md) for complete setup instructions including:
-- Creating the Firebase project in Firebase Console
-- Enabling Firestore in EU region
-- Configuring the Blaze plan for Cloud Functions
-- Setting up GitHub Actions for automated deployment
-
-### Environment Variables
 
 #### Frontend (Astro)
 

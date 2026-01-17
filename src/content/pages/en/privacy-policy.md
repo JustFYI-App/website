@@ -3,7 +3,7 @@ title: "Privacy Policy"
 description: "Read the Just FYI Privacy Policy to understand how we protect your data and privacy."
 lang: en
 pageSlug: "privacy-policy"
-lastUpdated: 2025-01-03
+lastUpdated: 2026-01-17
 showToc: true
 order: 90
 ---

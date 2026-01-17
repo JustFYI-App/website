@@ -3,7 +3,7 @@ title: "Politica de Privacidade"
 description: "Leia a Politica de Privacidade do Just FYI para entender como protegemos seus dados e privacidade."
 lang: pt
 pageSlug: "privacy-policy"
-lastUpdated: 2025-01-03
+lastUpdated: 2026-01-17
 showToc: true
 order: 90
 ---

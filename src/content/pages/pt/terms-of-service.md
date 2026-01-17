@@ -3,7 +3,7 @@ title: "Termos de Servico"
 description: "Revise os Termos de Servico do Just FYI para usar nosso aplicativo de rastreamento de contatos anonimo."
 lang: pt
 pageSlug: "terms-of-service"
-lastUpdated: 2025-01-03
+lastUpdated: 2026-01-17
 showToc: true
 order: 91
 ---

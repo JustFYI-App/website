@@ -3,7 +3,7 @@ title: "Conditions d'utilisation"
 description: "Consultez les Conditions d'utilisation de Just FYI pour l'utilisation de notre application de tracage de contacts anonyme."
 lang: fr
 pageSlug: "terms-of-service"
-lastUpdated: 2025-01-03
+lastUpdated: 2026-01-17
 showToc: true
 order: 91
 ---

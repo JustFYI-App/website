@@ -127,7 +127,7 @@ Le systeme de notification est concu pour la confidentialite. Lorsque vous recev
 
 ### Comment puis-je verifier que Just FYI est digne de confiance ?
 
-Just FYI est source-available. Vous pouvez :
+Just FYI est entierement open source sous la licence Apache 2.0. Vous pouvez :
 
 - Examiner notre code sur GitHub
 - Verifier les audits de securite (si disponibles)

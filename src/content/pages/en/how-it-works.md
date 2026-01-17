@@ -10,7 +10,7 @@ Just FYI is designed to be simple, private, and effective. Here is how it works 
 
 ## Step 1: Download the App
 
-Get Just FYI from your device's app store. The app is free, source-available, and designed with your privacy as the top priority.
+Get Just FYI from your device's app store. The app is free, open source (Apache 2.0), and designed with your privacy as the top priority.
 
 **What happens during setup:**
 - No account creation required
@@ -88,8 +88,8 @@ Interaction data is encrypted and stored securely. We use minimal data to enable
 ### Automatic Data Deletion
 Interaction history is automatically deleted after 180 days. You can delete your data at any time from your profile settings.
 
-### Source-Available
-Our code is publicly available for anyone to review. We have nothing to hide because we collect nothing to hide.
+### Open Source
+Our code is fully open source under the Apache 2.0 license. Anyone can review, audit, and contribute. We have nothing to hide because we collect nothing to hide.
 
 ### No Tracking
 No GPS, no location services, no behavioral tracking. Bluetooth is used only for proximity detection.

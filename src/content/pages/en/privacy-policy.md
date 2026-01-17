@@ -131,6 +131,6 @@ If you have questions about this Privacy Policy or our privacy practices, please
 - **Email**: support@justfyi.app
 - **GitHub**: [Report an Issue](https://github.com/JustFYI-App/JustFYI/issues)
 
-## Source Code
+## Open Source
 
-Just FYI is source-available software. You can review our code and verify our privacy practices at our [GitHub repository](https://github.com/JustFYI-App/JustFYI).
+Just FYI is fully open source software, released under the **Apache License 2.0**. You can review our code and verify our privacy practices at our [GitHub repository](https://github.com/JustFYI-App/JustFYI). Anyone can use, modify, and distribute the code freely.

@@ -72,15 +72,13 @@ Se voce receber uma notificacao de exposicao, consulte um profissional de saude.
 
 ## Propriedade intelectual
 
-### Licenca source-available
+### Licenca de codigo aberto
 
-Just FYI e software source-available lancado sob uma [licenca personalizada](https://github.com/JustFYI-App/JustFYI/blob/main/LICENSE). Voce pode:
+Just FYI e software totalmente de codigo aberto, lancado sob a **Licenca Apache 2.0**. Nossa [licenca](https://github.com/JustFYI-App/JustFYI/blob/main/LICENSE) permite:
 
-- Ver e revisar o codigo fonte
-- Contribuir com melhorias via pull requests
-- Usar e modificar o software para uso nao comercial (projetos pessoais, educacao, pesquisa)
-
-O uso comercial requer permissao explicita por escrito do detentor dos direitos autorais.
+- Ver, auditar e contribuir com o codigo fonte
+- Usar, modificar e distribuir o codigo livremente
+- Uso comercial sob os termos do Apache 2.0
 
 ### Marcas comerciais
 

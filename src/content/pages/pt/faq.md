@@ -86,9 +86,9 @@ Just FYI requer:
 
 A maioria dos smartphones fabricados apos 2021 deve ser compativel.
 
-### O Just FYI e source-available?
+### O Just FYI e de codigo aberto?
 
-Sim. Just FYI e software source-available sob uma licenca personalizada. Voce pode revisar nosso codigo, contribuir com melhorias ou verificar nossas afirmacoes de privacidade visitando nosso [repositorio GitHub](https://github.com/JustFYI-App/JustFYI). O uso nao comercial (projetos pessoais, educacao, pesquisa) e permitido. O uso comercial requer permissao explicita por escrito.
+Sim! Just FYI e totalmente de codigo aberto, lancado sob a **Licenca Apache 2.0**. Nosso codigo fonte esta disponivel publicamente para revisao, auditoria e contribuicoes. Qualquer pessoa pode usar, modificar e distribuir o codigo livremente. Visite nosso [repositorio GitHub](https://github.com/JustFYI-App/JustFYI) para explorar o codigo.
 
 ## Seguranca
 

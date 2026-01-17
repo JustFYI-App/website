@@ -72,14 +72,13 @@ Si vous recevez une notification d'exposition, veuillez consulter un professionn
 
 ## Propriete intellectuelle
 
-### Licence source-available
+### Licence Open Source
 
-Just FYI est un logiciel source-available. Notre [licence](https://github.com/JustFYI-App/JustFYI/blob/main/LICENSE) autorise :
+Just FYI est un logiciel entierement open source, publie sous la **Licence Apache 2.0**. Notre [licence](https://github.com/JustFYI-App/JustFYI/blob/main/LICENSE) autorise :
 
-- La consultation et la contribution au code
-- L'utilisation non commerciale (projets personnels, education, recherche)
-
-L'utilisation commerciale necessite une autorisation ecrite explicite du titulaire des droits d'auteur.
+- La consultation, l'audit et la contribution au code
+- L'utilisation, la modification et la distribution libre du code
+- L'utilisation commerciale selon les termes d'Apache 2.0
 
 ### Marques commerciales
 

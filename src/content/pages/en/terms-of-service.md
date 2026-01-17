@@ -72,14 +72,13 @@ If you receive an exposure notification, please consult with a healthcare profes
 
 ## Intellectual Property
 
-### Source-Available License
+### Open Source License
 
-Just FYI is source-available software. Our [license](https://github.com/JustFYI-App/JustFYI/blob/main/LICENSE) permits:
+Just FYI is fully open source software, released under the **Apache License 2.0**. Our [license](https://github.com/JustFYI-App/JustFYI/blob/main/LICENSE) permits:
 
-- Viewing and contributing to the codebase
-- Non-commercial use (personal projects, education, research)
-
-Commercial use requires explicit written permission from the copyright holder.
+- Viewing, auditing, and contributing to the codebase
+- Using, modifying, and distributing the code freely
+- Commercial use under the terms of Apache 2.0
 
 ### Trademarks
 

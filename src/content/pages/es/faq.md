@@ -88,7 +88,7 @@ La mayoria de los telefonos inteligentes fabricados despues de 2021 deberian ser
 
 ### Just FYI es de codigo abierto?
 
-Just FYI es source-available, no open source. Nuestro codigo fuente esta disponible publicamente para revision, auditoria y contribuciones. El uso no comercial esta permitido, pero el uso comercial requiere permiso explicito. Visita nuestro [repositorio de GitHub](https://github.com/JustFYI-App/JustFYI) para explorar el codigo.
+Si! Just FYI es completamente de codigo abierto, publicado bajo la **Licencia Apache 2.0**. Nuestro codigo fuente esta disponible publicamente para revision, auditoria y contribuciones. Cualquiera puede usar, modificar y distribuir el codigo libremente. Visita nuestro [repositorio de GitHub](https://github.com/JustFYI-App/JustFYI) para explorar el codigo.
 
 ## Seguridad
 

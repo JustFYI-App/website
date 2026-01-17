@@ -147,7 +147,7 @@ const en: UITranslations = {
     tagline: 'Privacy-First Anonymous Contact Tracing',
     legal: 'Legal',
     resources: 'Resources',
-    openSource: 'Source-available on GitHub',
+    openSource: 'Open Source on GitHub (Apache 2.0)',
     madeWith: 'Made with privacy in mind',
   },
   language: {
@@ -238,7 +238,7 @@ const de: UITranslations = {
     tagline: 'Anonyme Kontaktverfolgung mit Datenschutz',
     legal: 'Rechtliches',
     resources: 'Ressourcen',
-    openSource: 'Source-available auf GitHub',
+    openSource: 'Open Source auf GitHub (Apache 2.0)',
     madeWith: 'Mit Datenschutz im Sinn entwickelt',
   },
   language: {
@@ -329,7 +329,7 @@ const es: UITranslations = {
     tagline: 'Rastreo de contactos anonimo con privacidad primero',
     legal: 'Legal',
     resources: 'Recursos',
-    openSource: 'Source-available en GitHub',
+    openSource: 'Codigo abierto en GitHub (Apache 2.0)',
     madeWith: 'Hecho pensando en la privacidad',
   },
   language: {
@@ -420,7 +420,7 @@ const fr: UITranslations = {
     tagline: 'Tracage de contacts anonyme axe sur la confidentialite',
     legal: 'Mentions legales',
     resources: 'Ressources',
-    openSource: 'Source-available sur GitHub',
+    openSource: 'Open Source sur GitHub (Apache 2.0)',
     madeWith: 'Concu avec la confidentialite a l\'esprit',
   },
   language: {
@@ -511,7 +511,7 @@ const pt: UITranslations = {
     tagline: 'Rastreamento de contatos anonimo com privacidade em primeiro lugar',
     legal: 'Juridico',
     resources: 'Recursos',
-    openSource: 'Source-available no GitHub',
+    openSource: 'Codigo aberto no GitHub (Apache 2.0)',
     madeWith: 'Feito com privacidade em mente',
   },
   language: {

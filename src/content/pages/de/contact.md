@@ -127,7 +127,7 @@ Das Benachrichtigungssystem ist auf Privatsphäre ausgelegt. Wenn Sie eine Benac
 
 ### Wie kann ich überprüfen, ob Just FYI vertrauenswürdig ist?
 
-Just FYI ist Source-Available. Sie können:
+Just FYI ist vollständig Open Source unter der Apache 2.0-Lizenz. Sie können:
 
 - Unseren Code auf GitHub überprüfen
 - Sicherheitsaudits prüfen (falls verfügbar)

@@ -131,6 +131,6 @@ Si tienes preguntas sobre esta Politica de Privacidad o nuestras practicas de pr
 - **Correo electronico**: support@justfyi.app
 - **GitHub**: [Reportar un problema](https://github.com/JustFYI-App/JustFYI/issues)
 
-## Codigo fuente
+## Codigo abierto
 
-Just FYI es software source-available. Puedes revisar nuestro codigo y verificar nuestras practicas de privacidad en nuestro [repositorio de GitHub](https://github.com/JustFYI-App/JustFYI).
+Just FYI es software completamente de codigo abierto, publicado bajo la **Licencia Apache 2.0**. Puedes revisar nuestro codigo y verificar nuestras practicas de privacidad en nuestro [repositorio de GitHub](https://github.com/JustFYI-App/JustFYI). Cualquiera puede usar, modificar y distribuir el codigo libremente.

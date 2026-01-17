@@ -88,7 +88,7 @@ Die meisten Smartphones, die nach 2021 hergestellt wurden, sollten kompatibel se
 
 ### Ist Just FYI Open Source?
 
-Just FYI ist Source-Available, nicht Open Source. Unser Quellcode ist öffentlich einsehbar, auditierbar und beitragsfähig. Nicht-kommerzielle Nutzung ist erlaubt, kommerzielle Nutzung erfordert eine ausdrückliche Genehmigung. Besuchen Sie unser [GitHub-Repository](https://github.com/JustFYI-App/JustFYI), um den Code zu erkunden.
+Ja! Just FYI ist vollständig Open Source, veröffentlicht unter der **Apache 2.0 Lizenz**. Unser Quellcode ist öffentlich einsehbar, auditierbar und beitragsfähig. Jeder kann den Code frei nutzen, modifizieren und verteilen. Besuchen Sie unser [GitHub-Repository](https://github.com/JustFYI-App/JustFYI), um den Code zu erkunden.
 
 ## Sicherheit
 

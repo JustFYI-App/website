@@ -10,7 +10,7 @@ Just FYI esta disenado para ser simple, privado y efectivo. Asi es como funciona
 
 ## Paso 1: Descarga la app
 
-Obtiene Just FYI desde la tienda de aplicaciones de tu dispositivo. La app es gratuita, con codigo fuente disponible publicamente, y disenada con tu privacidad como maxima prioridad.
+Obtiene Just FYI desde la tienda de aplicaciones de tu dispositivo. La app es gratuita, de codigo abierto (Apache 2.0), y disenada con tu privacidad como maxima prioridad.
 
 **Que sucede durante la configuracion:**
 - No se requiere creacion de cuenta
@@ -88,8 +88,8 @@ Los datos de interaccion estan encriptados y almacenados de forma segura. Usamos
 ### Eliminacion automatica de datos
 El historial de interacciones se elimina automaticamente despues de 180 dias. Puedes eliminar tus datos en cualquier momento desde la configuracion de tu perfil.
 
-### Codigo fuente disponible
-Nuestro codigo esta disponible publicamente para que cualquiera lo revise. No tenemos nada que ocultar porque no recopilamos nada que ocultar.
+### Codigo abierto
+Nuestro codigo es completamente de codigo abierto bajo la licencia Apache 2.0. Cualquiera puede revisarlo, auditarlo y contribuir. No tenemos nada que ocultar porque no recopilamos nada que ocultar.
 
 ### Sin rastreo
 Sin GPS, sin servicios de ubicacion, sin rastreo de comportamiento. El Bluetooth se usa solo para deteccion de proximidad.

@@ -131,6 +131,6 @@ Wenn Sie Fragen zu dieser Datenschutzerklärung oder unseren Datenschutzpraktike
 - **E-Mail**: support@justfyi.app
 - **GitHub**: [Problem melden](https://github.com/JustFYI-App/JustFYI/issues)
 
-## Quellcode
+## Open Source
 
-Just FYI ist Source-Available-Software. Sie können unseren Code überprüfen und unsere Datenschutzpraktiken in unserem [GitHub-Repository](https://github.com/JustFYI-App/JustFYI) verifizieren.
+Just FYI ist vollständig Open-Source-Software, veröffentlicht unter der **Apache-Lizenz 2.0**. Sie können unseren Code überprüfen und unsere Datenschutzpraktiken in unserem [GitHub-Repository](https://github.com/JustFYI-App/JustFYI) verifizieren. Jeder kann den Code frei verwenden, modifizieren und verteilen.

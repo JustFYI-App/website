@@ -72,14 +72,13 @@ Wenn Sie eine Expositionsbenachrichtigung erhalten, wenden Sie sich bitte an ein
 
 ## Geistiges Eigentum
 
-### Source-Available-Lizenz
+### Open-Source-Lizenz
 
-Just FYI ist Source-Available-Software. Unsere [Lizenz](https://github.com/JustFYI-App/JustFYI/blob/main/LICENSE) erlaubt:
+Just FYI ist vollständig Open-Source-Software, veröffentlicht unter der **Apache-Lizenz 2.0**. Unsere [Lizenz](https://github.com/JustFYI-App/JustFYI/blob/main/LICENSE) erlaubt:
 
-- Einsicht in und Beiträge zur Codebasis
-- Nicht-kommerzielle Nutzung (persönliche Projekte, Bildung, Forschung)
-
-Kommerzielle Nutzung erfordert eine ausdrückliche schriftliche Genehmigung des Urheberrechtsinhabers.
+- Einsicht, Prüfung und Beiträge zur Codebasis
+- Freie Nutzung, Modifikation und Verteilung des Codes
+- Kommerzielle Nutzung gemäß den Bedingungen von Apache 2.0
 
 ### Marken
 

@@ -52,15 +52,17 @@ Just FYI wird für und mit unserer Gemeinschaft gebaut. Wir hören auf Feedback,
 
 Just FYI ist bestrebt, für alle kostenlos zu bleiben. Wir verkaufen keine Daten, zeigen keine Werbung und monetarisieren unsere Benutzer nicht. Um laufende Serverkosten zu decken, können wir in Zukunft optionale Trinkgelder einführen oder Sponsoring akzeptieren, aber das Kernprodukt wird immer kostenlos sein.
 
-## Quellcode
+## Open Source
 
-Just FYI ist Source-Available-Software. Das bedeutet:
+Just FYI ist vollständig Open-Source-Software, veröffentlicht unter der **Apache 2.0 Lizenz**. Das bedeutet:
 
 - **Jeder kann unseren Code überprüfen**, um unsere Datenschutzansprüche zu verifizieren
 - **Sicherheitsforscher können** unsere Implementierung auditieren
 - **Entwickler können** Verbesserungen und Korrekturen beitragen
-- **Nicht-kommerzielle Nutzung** ist erlaubt (persönliche Projekte, Bildung, Forschung)
-- **Kommerzielle Nutzung** erfordert eine ausdrückliche Genehmigung
+- **Jeder kann den Code frei nutzen, modifizieren und verteilen**
+- **Kommerzielle Nutzung ist erlaubt** unter den Apache 2.0 Bedingungen
+
+Wir glauben, dass Open Source für Datenschutz-Software unerlässlich ist. Sie sollten uns niemals blind vertrauen müssen - Sie können alles selbst überprüfen.
 
 Besuchen Sie unser [GitHub-Repository](https://github.com/JustFYI-App/JustFYI), um den Code zu erkunden, Probleme zu melden oder zum Projekt beizutragen.
 

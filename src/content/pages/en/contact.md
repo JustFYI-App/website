@@ -127,7 +127,7 @@ The notification system is designed for privacy. When you receive a notification
 
 ### How can I verify Just FYI is trustworthy?
 
-Just FYI is source-available. You can:
+Just FYI is fully open source under the Apache 2.0 license. You can:
 
 - Review our code on GitHub
 - Check security audits (if available)

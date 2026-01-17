@@ -127,7 +127,7 @@ O sistema de notificacao e projetado para privacidade. Quando voce recebe uma no
 
 ### Como posso verificar se o Just FYI e confiavel?
 
-Just FYI e source-available. Voce pode:
+Just FYI e totalmente de codigo aberto sob a licenca Apache 2.0. Voce pode:
 
 - Revisar nosso codigo no GitHub
 - Verificar auditorias de seguranca (se disponiveis)

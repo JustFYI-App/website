@@ -11,6 +11,7 @@
  * - language.* - Language switcher labels
  * - home.* - Home page specific strings
  * - meta.* - Meta descriptions and SEO text
+ * - subscribe.* - Email subscription form strings
  */
 
 /**
@@ -89,6 +90,18 @@ export interface UITranslations {
   pages: {
     lastUpdated: string;
     tableOfContents: string;
+  };
+  subscribe: {
+    title: string;
+    placeholder: string;
+    button: string;
+    buttonSubmitting: string;
+    success: string;
+    error: string;
+    alreadySubscribed: string;
+    privacyNote: string;
+    networkError: string;
+    timeout: string;
   };
 }
 
@@ -169,6 +182,18 @@ const en: UITranslations = {
     lastUpdated: 'Last Updated',
     tableOfContents: 'Table of Contents',
   },
+  subscribe: {
+    title: 'Get notified when Just FYI launches',
+    placeholder: 'Enter your email',
+    button: 'Subscribe',
+    buttonSubmitting: 'Subscribing...',
+    success: 'Thanks for subscribing! We\'ll keep you posted.',
+    error: 'Something went wrong. Please try again.',
+    alreadySubscribed: 'You\'re already subscribed!',
+    privacyNote: 'We\'ll only email you about JustFYI app updates. No spam, no sharing with third parties.',
+    networkError: 'Unable to connect. Please check your connection and try again.',
+    timeout: 'Request timed out. Please try again.',
+  },
 };
 
 /**
@@ -247,6 +272,18 @@ const de: UITranslations = {
   pages: {
     lastUpdated: 'Zuletzt aktualisiert',
     tableOfContents: 'Inhaltsverzeichnis',
+  },
+  subscribe: {
+    title: 'Benachrichtigung erhalten, wenn Just FYI startet',
+    placeholder: 'E-Mail-Adresse eingeben',
+    button: 'Abonnieren',
+    buttonSubmitting: 'Wird abonniert...',
+    success: 'Danke fuer Ihre Anmeldung! Wir halten Sie auf dem Laufenden.',
+    error: 'Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.',
+    alreadySubscribed: 'Sie sind bereits angemeldet!',
+    privacyNote: 'Wir senden Ihnen nur E-Mails zu JustFYI App-Updates. Kein Spam, keine Weitergabe an Dritte.',
+    networkError: 'Verbindung nicht moeglich. Bitte pruefen Sie Ihre Internetverbindung und versuchen Sie es erneut.',
+    timeout: 'Zeitlimit ueberschritten. Bitte versuchen Sie es erneut.',
   },
 };
 
@@ -327,6 +364,18 @@ const es: UITranslations = {
     lastUpdated: 'Ultima actualizacion',
     tableOfContents: 'Tabla de contenidos',
   },
+  subscribe: {
+    title: 'Recibe notificaciones cuando Just FYI se lance',
+    placeholder: 'Ingresa tu correo electronico',
+    button: 'Suscribirse',
+    buttonSubmitting: 'Suscribiendo...',
+    success: 'Gracias por suscribirte! Te mantendremos informado.',
+    error: 'Algo salio mal. Por favor, intentalo de nuevo.',
+    alreadySubscribed: 'Ya estas suscrito!',
+    privacyNote: 'Solo te enviaremos correos sobre actualizaciones de la app JustFYI. Sin spam, sin compartir con terceros.',
+    networkError: 'No se puede conectar. Por favor, verifica tu conexion e intentalo de nuevo.',
+    timeout: 'La solicitud ha expirado. Por favor, intentalo de nuevo.',
+  },
 };
 
 /**
@@ -405,6 +454,18 @@ const fr: UITranslations = {
   pages: {
     lastUpdated: 'Derniere mise a jour',
     tableOfContents: 'Table des matieres',
+  },
+  subscribe: {
+    title: 'Soyez informe du lancement de Just FYI',
+    placeholder: 'Entrez votre email',
+    button: 'S\'abonner',
+    buttonSubmitting: 'Abonnement en cours...',
+    success: 'Merci de vous etre abonne! Nous vous tiendrons informe.',
+    error: 'Une erreur s\'est produite. Veuillez reessayer.',
+    alreadySubscribed: 'Vous etes deja abonne!',
+    privacyNote: 'Nous vous enverrons uniquement des emails concernant les mises a jour de l\'app JustFYI. Pas de spam, pas de partage avec des tiers.',
+    networkError: 'Impossible de se connecter. Veuillez verifier votre connexion et reessayer.',
+    timeout: 'La requete a expire. Veuillez reessayer.',
   },
 };
 
@@ -485,6 +546,18 @@ const pt: UITranslations = {
     lastUpdated: 'Ultima atualizacao',
     tableOfContents: 'Indice',
   },
+  subscribe: {
+    title: 'Receba notificacoes quando o Just FYI for lancado',
+    placeholder: 'Digite seu email',
+    button: 'Inscrever-se',
+    buttonSubmitting: 'Inscrevendo...',
+    success: 'Obrigado por se inscrever! Manteremos voce informado.',
+    error: 'Algo deu errado. Por favor, tente novamente.',
+    alreadySubscribed: 'Voce ja esta inscrito!',
+    privacyNote: 'Enviaremos apenas emails sobre atualizacoes do app JustFYI. Sem spam, sem compartilhamento com terceiros.',
+    networkError: 'Nao foi possivel conectar. Por favor, verifique sua conexao e tente novamente.',
+    timeout: 'A solicitacao expirou. Por favor, tente novamente.',
+  },
 };
 
 /**
@@ -508,4 +581,5 @@ export type UIKey =
   | `language.${keyof UITranslations['language']}`
   | `home.${keyof UITranslations['home']}`
   | `meta.${keyof UITranslations['meta']}`
-  | `pages.${keyof UITranslations['pages']}`;
+  | `pages.${keyof UITranslations['pages']}`
+  | `subscribe.${keyof UITranslations['subscribe']}`;

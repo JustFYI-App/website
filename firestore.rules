@@ -1,0 +1,26 @@
+rules_version = '2';
+
+// Firestore Security Rules for justfyi-web
+// All collections are only accessible via Cloud Functions (Admin SDK)
+// No direct client access is allowed
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Deny all client read/write access to subscribers collection
+    // Only Cloud Functions with Admin SDK can access this collection
+    match /subscribers/{document=**} {
+      allow read, write: if false;
+    }
+
+    // Deny all client read/write access to rate_limits collection
+    // Only Cloud Functions with Admin SDK can access this collection
+    match /rate_limits/{document=**} {
+      allow read, write: if false;
+    }
+
+    // Default deny rule for any other collections
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -12,6 +12,7 @@ This website provides:
 - How It Works guide
 - About page
 - Contact information
+- Email subscription form for launch notifications
 
 Available in 5 languages: English, German, Spanish, French, and Portuguese.
 
@@ -21,6 +22,7 @@ Available in 5 languages: English, German, Spanish, French, and Portuguese.
 - **Styling:** Pure CSS with custom properties
 - **JavaScript:** Zero client-side JavaScript (CSS-only mobile menu and accordions)
 - **Build Output:** Static HTML/CSS files
+- **Email Subscription:** Firebase Cloud Functions + Firestore
 
 ## Quick Start
 
@@ -66,9 +68,11 @@ website/
 │   │   ├── Navigation.astro # Navigation links
 │   │   ├── LanguageSwitcher.astro
 │   │   ├── MobileMenu.astro
+│   │   ├── SubscriptionForm.astro  # Email subscription form
 │   │   └── ...
 │   ├── config/
-│   │   └── site.ts          # Central branding configuration
+│   │   ├── site.ts          # Central branding configuration
+│   │   └── api.ts           # API endpoint configuration
 │   ├── content/
 │   │   ├── config.ts        # Content collection schema
 │   │   └── pages/
@@ -89,11 +93,105 @@ website/
 │   │   └── [lang]/          # Localized pages
 │   └── styles/
 │       └── global.css       # Global styles
+├── functions/               # Firebase Cloud Functions
+│   ├── src/                 # Function source code
+│   ├── FIREBASE_SETUP.md    # Firebase setup instructions
+│   └── README.md            # Function API documentation
 ├── astro.config.mjs         # Astro configuration
+├── firebase.json            # Firebase configuration
+├── firestore.rules          # Firestore security rules
 ├── netlify.toml             # Netlify deployment config
 ├── vercel.json              # Vercel deployment config
 ├── package.json
 └── tsconfig.json
+```
+
+## Email Subscription System
+
+The website includes an email subscription system for collecting early access signups. This system runs on a **separate Firebase project** (`justfyi-web`) to maintain complete isolation from the main JustFYI app's anonymous architecture.
+
+### Architecture
+
+- **Frontend:** Astro component (`SubscriptionForm.astro`) with vanilla JavaScript
+- **Backend:** Firebase Cloud Functions (Node.js 20, TypeScript)
+- **Database:** Firestore (EU region - `eur3`)
+- **Spam Protection:** Honeypot field, rate limiting (5 req/IP/hour), IP hashing
+
+### Firebase Project Setup
+
+See [`functions/FIREBASE_SETUP.md`](functions/FIREBASE_SETUP.md) for complete setup instructions including:
+- Creating the Firebase project in Firebase Console
+- Enabling Firestore in EU region
+- Configuring the Blaze plan for Cloud Functions
+- Setting up GitHub Actions for automated deployment
+
+### Environment Variables
+
+#### Frontend (Astro)
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `PUBLIC_SUBSCRIBE_API_URL` | Cloud Function URL | `https://europe-west1-justfyi-web.cloudfunctions.net/subscribe` |
+
+Set in `.env` file for local development:
+
+```bash
+PUBLIC_SUBSCRIBE_API_URL=http://localhost:5001/justfyi-web/europe-west1/subscribe
+```
+
+#### Backend (Cloud Functions)
+
+No secrets or API keys required. The functions use Firebase Admin SDK which authenticates automatically.
+
+#### GitHub Actions
+
+| Secret | Description | Required |
+|--------|-------------|----------|
+| `FIREBASE_SERVICE_ACCOUNT` | JSON key for Firebase service account | Yes |
+
+### Development Workflow
+
+1. **Start the Astro dev server:**
+   ```bash
+   npm run dev
+   ```
+
+2. **Start Firebase emulators (in a separate terminal):**
+   ```bash
+   cd functions
+   npm run serve
+   ```
+
+3. **Set the local API URL:**
+   Create a `.env` file in the project root:
+   ```bash
+   PUBLIC_SUBSCRIBE_API_URL=http://localhost:5001/justfyi-web/europe-west1/subscribe
+   ```
+
+4. **Test the subscription form** at http://localhost:4321
+
+### API Documentation
+
+See [`functions/README.md`](functions/README.md) for complete API documentation including:
+- Endpoint details
+- Request/response formats
+- Error codes
+- Example curl commands
+
+### Deployment
+
+Firebase deployment is automated via GitHub Actions (`.github/workflows/firebase-deploy.yml`):
+
+- **Automatic:** Triggers on push to main when `functions/` files change
+- **Manual:** Trigger via GitHub Actions UI with deployment options
+
+Manual deployment:
+```bash
+cd functions
+npm install
+npm run build
+cd ..
+firebase deploy --only functions,firestore:rules
 ```
 
 ## Configuration
@@ -143,7 +241,8 @@ export const siteConfig = {
 1. Update `domain` in `src/config/site.ts`
 2. Update `site` in `astro.config.mjs`
 3. Update sitemap URL in `public/robots.txt`
-4. Rebuild the site
+4. Update CORS origins in `functions/src/index.ts`
+5. Rebuild the site
 
 ### Adding/Editing Content
 
@@ -352,6 +451,20 @@ This website is optimized for performance:
 - Focus indicators for keyboard navigation
 - Reduced motion support
 - Touch-friendly tap targets (min 44px)
+
+## Testing
+
+```bash
+# Run all tests
+npm test
+
+# Run tests in watch mode
+npm run test:watch
+
+# Run Firebase function tests
+cd functions
+npm test
+```
 
 ## License
 

@@ -1,0 +1,603 @@
+---
+/**
+ * SubscriptionForm Component
+ *
+ * Email subscription form for collecting subscriber emails.
+ * This component uses vanilla JavaScript for form handling (exception to no-JS rule)
+ * since API calls are required.
+ *
+ * Features:
+ * - Email input with HTML5 validation
+ * - Honeypot field for spam protection (positioned off-screen, not display:none)
+ * - Form states: initial, submitting, success, error, already subscribed
+ * - Full internationalization support
+ * - Accessibility compliant (ARIA labels, focus management)
+ * - Dark mode support
+ * - WCAG AA contrast compliance
+ * - Minimum 44px touch targets
+ */
+
+import { type LanguageCode } from '@i18n/languages';
+import { useTranslations } from '@i18n/utils';
+import { getSubscribeUrl, getTimeout } from '@config/api';
+
+interface Props {
+  lang: LanguageCode;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+// Get API configuration from centralized config
+const apiUrl = getSubscribeUrl();
+const timeout = getTimeout();
+---
+
+<div class="subscription-form" data-lang={lang} data-api-url={apiUrl} data-timeout={timeout}>
+  <h3 class="subscription-form__title">{t('subscribe.title')}</h3>
+
+  <form id="subscription-form" class="subscription-form__form" novalidate>
+    <div class="subscription-form__input-group">
+      <label for="email-input" class="sr-only">Email address</label>
+      <input
+        type="email"
+        id="email-input"
+        name="email"
+        class="subscription-form__input"
+        placeholder={t('subscribe.placeholder')}
+        required
+        pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$"
+        aria-describedby="email-hint"
+        autocomplete="email"
+      />
+
+      <!-- Honeypot field - hidden from users, traps bots -->
+      <!-- Positioned off-screen (not display:none) to avoid bot detection -->
+      <div class="subscription-form__honeypot" aria-hidden="true">
+        <label for="website-field">Website</label>
+        <input
+          type="text"
+          id="website-field"
+          name="website"
+          tabindex="-1"
+          autocomplete="off"
+        />
+      </div>
+
+      <button type="submit" class="btn btn-primary subscription-form__button">
+        <span class="subscription-form__button-text">{t('subscribe.button')}</span>
+        <span class="subscription-form__button-loading">{t('subscribe.buttonSubmitting')}</span>
+      </button>
+    </div>
+
+    <p id="email-hint" class="subscription-form__privacy">
+      {t('subscribe.privacyNote')}
+    </p>
+  </form>
+
+  <!-- Success message -->
+  <div
+    class="subscription-form__message subscription-form__message--success"
+    role="status"
+    aria-live="polite"
+  >
+    <span class="subscription-form__message-icon" aria-hidden="true">&#10003;</span>
+    <span class="subscription-form__message-text">{t('subscribe.success')}</span>
+  </div>
+
+  <!-- Error message -->
+  <div
+    class="subscription-form__message subscription-form__message--error"
+    role="alert"
+    aria-live="assertive"
+  >
+    <span class="subscription-form__message-text">{t('subscribe.error')}</span>
+  </div>
+
+  <!-- Already subscribed message -->
+  <div
+    class="subscription-form__message subscription-form__message--info"
+    role="status"
+    aria-live="polite"
+  >
+    <span class="subscription-form__message-text">{t('subscribe.alreadySubscribed')}</span>
+  </div>
+</div>
+
+<style>
+  /* ==========================================================================
+     Subscription Form Styles - Mobile First (320px - 639px)
+
+     Uses CSS custom properties from global.css for consistency with design system.
+     References existing input styles (lines 1081-1120) and button styles (.btn, .btn-primary).
+     ========================================================================== */
+
+  .subscription-form {
+    width: 100%;
+    max-width: 500px;
+    margin: var(--space-8) auto 0;
+    text-align: center;
+  }
+
+  .subscription-form__title {
+    font-size: var(--text-lg);
+    font-weight: var(--font-semibold);
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-4);
+    transition: color var(--transition-slow) ease-in-out;
+  }
+
+  .subscription-form__form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  /* Stacked layout on mobile (320px - 639px) */
+  .subscription-form__input-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    position: relative;
+  }
+
+  /* ==========================================================================
+     Input Styles - Following global.css patterns (lines 1081-1120)
+     ========================================================================== */
+
+  .subscription-form__input {
+    display: block;
+    width: 100%;
+    padding: var(--space-3) var(--space-4);
+    font-size: var(--text-base);
+    line-height: var(--leading-normal);
+    color: var(--color-text-primary);
+    background-color: var(--color-bg-primary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    /* Minimum 44px touch target for accessibility */
+    min-height: var(--min-touch-target);
+    transition: border-color var(--transition-fast) ease-in-out,
+      box-shadow var(--transition-fast) ease-in-out,
+      background-color var(--transition-slow) ease-in-out,
+      color var(--transition-slow) ease-in-out;
+  }
+
+  .subscription-form__input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px var(--color-focus-ring);
+  }
+
+  .subscription-form__input::placeholder {
+    color: var(--color-text-muted);
+  }
+
+  /* Disabled state during form submission */
+  .subscription-form__input:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background-color: var(--color-bg-tertiary);
+  }
+
+  /* Invalid state for HTML5 validation */
+  .subscription-form__input:invalid:not(:placeholder-shown):not(:focus) {
+    border-color: var(--color-error);
+  }
+
+  /* ==========================================================================
+     Honeypot Field - Spam Protection
+
+     Positioned off-screen using absolute positioning (not display: none).
+     Bots typically fill all visible fields, so this hidden field catches them.
+     ========================================================================== */
+
+  .subscription-form__honeypot {
+    position: absolute;
+    left: -9999px;
+    top: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    /* Additional measures to hide from assistive technology */
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* ==========================================================================
+     Button Styles - Following .btn and .btn-primary patterns from global.css
+     ========================================================================== */
+
+  .subscription-form__button {
+    width: 100%;
+    /* Minimum 44px touch target for accessibility */
+    min-height: var(--min-touch-target);
+    /* Padding matches global.css button padding */
+    padding: var(--space-3) var(--space-5);
+    font-size: var(--text-base);
+    font-weight: var(--font-medium);
+  }
+
+  .subscription-form__button-loading {
+    display: none;
+  }
+
+  /* ==========================================================================
+     Submitting State - Reduced opacity, cursor wait
+     ========================================================================== */
+
+  .subscription-form__button[disabled] {
+    opacity: 0.7;
+    cursor: wait;
+    pointer-events: none;
+  }
+
+  .subscription-form__button[disabled] .subscription-form__button-text {
+    display: none;
+  }
+
+  .subscription-form__button[disabled] .subscription-form__button-loading {
+    display: inline;
+  }
+
+  /* ==========================================================================
+     Privacy Note
+     ========================================================================== */
+
+  .subscription-form__privacy {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    margin: 0;
+    line-height: var(--leading-relaxed);
+    transition: color var(--transition-slow) ease-in-out;
+  }
+
+  /* ==========================================================================
+     Message Styles - Success, Error, Already Subscribed States
+     ========================================================================== */
+
+  .subscription-form__message {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    padding: var(--space-4);
+    border-radius: var(--radius-lg);
+    font-size: var(--text-base);
+    text-align: center;
+    transition: background-color var(--transition-slow) ease-in-out,
+      color var(--transition-slow) ease-in-out,
+      border-color var(--transition-slow) ease-in-out;
+  }
+
+  /* Success message: green background with checkmark icon */
+  .subscription-form__message--success {
+    background-color: rgba(16, 185, 129, 0.1);
+    color: var(--color-success);
+    border: 1px solid var(--color-success);
+  }
+
+  /* Error message: red background */
+  .subscription-form__message--error {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: var(--color-error);
+    border: 1px solid var(--color-error);
+  }
+
+  /* Already subscribed: blue info message */
+  .subscription-form__message--info {
+    background-color: rgba(99, 112, 216, 0.1);
+    color: var(--color-primary);
+    border: 1px solid var(--color-primary);
+  }
+
+  .subscription-form__message-icon {
+    font-size: var(--text-xl);
+    font-weight: var(--font-bold);
+    line-height: 1;
+  }
+
+  .subscription-form__message-text {
+    font-weight: var(--font-medium);
+  }
+
+  /* ==========================================================================
+     Dark Theme Support - Using [data-theme="dark"] selectors
+     Following patterns from existing components in global.css
+     Ensures WCAG AA contrast compliance in dark mode
+     ========================================================================== */
+
+  :global([data-theme="dark"]) .subscription-form__title {
+    color: var(--color-text-primary);
+  }
+
+  :global([data-theme="dark"]) .subscription-form__input {
+    background-color: var(--color-bg-secondary);
+    border-color: var(--color-border);
+    color: var(--color-text-primary);
+  }
+
+  :global([data-theme="dark"]) .subscription-form__input::placeholder {
+    color: var(--color-text-muted);
+  }
+
+  :global([data-theme="dark"]) .subscription-form__input:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px var(--color-focus-ring);
+  }
+
+  :global([data-theme="dark"]) .subscription-form__input:disabled {
+    background-color: var(--color-bg-tertiary);
+  }
+
+  :global([data-theme="dark"]) .subscription-form__privacy {
+    color: var(--color-text-muted);
+  }
+
+  /* Dark mode message backgrounds with higher opacity for visibility */
+  :global([data-theme="dark"]) .subscription-form__message--success {
+    background-color: rgba(52, 211, 153, 0.15);
+    color: var(--color-success);
+    border-color: var(--color-success);
+  }
+
+  :global([data-theme="dark"]) .subscription-form__message--error {
+    background-color: rgba(248, 113, 113, 0.15);
+    color: var(--color-error);
+    border-color: var(--color-error);
+  }
+
+  :global([data-theme="dark"]) .subscription-form__message--info {
+    background-color: rgba(142, 151, 223, 0.15);
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+  }
+
+  /* ==========================================================================
+     Tablet Breakpoint (640px - 1023px) - Inline Layout
+     Input and button side by side
+     ========================================================================== */
+
+  @media (min-width: 640px) {
+    .subscription-form {
+      max-width: 600px;
+    }
+
+    .subscription-form__title {
+      font-size: var(--text-xl);
+      margin-bottom: var(--space-5);
+    }
+
+    /* Inline layout: input and button side by side */
+    .subscription-form__input-group {
+      flex-direction: row;
+      gap: var(--space-3);
+      align-items: stretch;
+    }
+
+    .subscription-form__input {
+      flex: 1;
+      min-width: 0; /* Allow input to shrink */
+    }
+
+    .subscription-form__button {
+      width: auto;
+      flex-shrink: 0;
+      padding: var(--space-3) var(--space-6);
+    }
+
+    .subscription-form__privacy {
+      text-align: center;
+    }
+  }
+
+  /* ==========================================================================
+     Desktop Breakpoint (1024px+) - Inline Layout with Max-Width
+     ========================================================================== */
+
+  @media (min-width: 1024px) {
+    .subscription-form {
+      max-width: 700px;
+    }
+
+    .subscription-form__title {
+      font-size: var(--text-2xl);
+      margin-bottom: var(--space-6);
+    }
+
+    .subscription-form__input-group {
+      gap: var(--space-4);
+    }
+
+    .subscription-form__button {
+      padding: var(--space-3) var(--space-8);
+    }
+
+    .subscription-form__message {
+      padding: var(--space-5);
+    }
+  }
+
+  /* ==========================================================================
+     Reduced Motion - Respects user preference
+     ========================================================================== */
+
+  @media (prefers-reduced-motion: reduce) {
+    .subscription-form__title,
+    .subscription-form__input,
+    .subscription-form__privacy,
+    .subscription-form__message {
+      transition: none;
+    }
+  }
+
+  /* ==========================================================================
+     High Contrast Mode - Enhanced visibility
+     ========================================================================== */
+
+  @media (prefers-contrast: high) {
+    .subscription-form__input {
+      border-width: 2px;
+    }
+
+    .subscription-form__input:focus {
+      box-shadow: 0 0 0 4px var(--color-focus-ring);
+    }
+
+    .subscription-form__message {
+      border-width: 2px;
+    }
+  }
+
+  /* ==========================================================================
+     Screen Reader Only - Utility class for accessible labels
+     ========================================================================== */
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+</style>
+
+<script>
+  /**
+   * Subscription Form Handler
+   *
+   * Handles form submission, API calls, and state management.
+   * This is an exception to the no-JS rule since API calls are required.
+   */
+  document.addEventListener('DOMContentLoaded', () => {
+    const formContainer = document.querySelector('.subscription-form') as HTMLElement;
+    if (!formContainer) return;
+
+    const form = document.getElementById('subscription-form') as HTMLFormElement;
+    const emailInput = document.getElementById('email-input') as HTMLInputElement;
+    const honeypotInput = document.getElementById('website-field') as HTMLInputElement;
+    const submitButton = form?.querySelector('button[type="submit"]') as HTMLButtonElement;
+    const successMessage = formContainer.querySelector('.subscription-form__message--success') as HTMLElement;
+    const errorMessage = formContainer.querySelector('.subscription-form__message--error') as HTMLElement;
+    const infoMessage = formContainer.querySelector('.subscription-form__message--info') as HTMLElement;
+    const errorText = errorMessage?.querySelector('.subscription-form__message-text') as HTMLElement;
+
+    const apiUrl = formContainer.dataset.apiUrl || '';
+    const timeout = parseInt(formContainer.dataset.timeout || '10000', 10);
+    const lang = formContainer.dataset.lang || 'en';
+
+    // Translation strings for error messages
+    const translations: Record<string, Record<string, string>> = {
+      en: {
+        networkError: 'Unable to connect. Please check your connection and try again.',
+        timeout: 'Request timed out. Please try again.',
+        genericError: 'Something went wrong. Please try again.',
+      },
+      de: {
+        networkError: 'Verbindung nicht moeglich. Bitte pruefen Sie Ihre Internetverbindung und versuchen Sie es erneut.',
+        timeout: 'Zeitlimit ueberschritten. Bitte versuchen Sie es erneut.',
+        genericError: 'Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.',
+      },
+      es: {
+        networkError: 'No se puede conectar. Por favor, verifica tu conexion e intentalo de nuevo.',
+        timeout: 'La solicitud ha expirado. Por favor, intentalo de nuevo.',
+        genericError: 'Algo salio mal. Por favor, intentalo de nuevo.',
+      },
+      fr: {
+        networkError: 'Impossible de se connecter. Veuillez verifier votre connexion et reessayer.',
+        timeout: 'La requete a expire. Veuillez reessayer.',
+        genericError: 'Une erreur s\'est produite. Veuillez reessayer.',
+      },
+      pt: {
+        networkError: 'Nao foi possivel conectar. Por favor, verifique sua conexao e tente novamente.',
+        timeout: 'A solicitacao expirou. Por favor, tente novamente.',
+        genericError: 'Algo deu errado. Por favor, tente novamente.',
+      },
+    };
+
+    const t = translations[lang] || translations.en;
+
+    if (!form || !emailInput || !submitButton) return;
+
+    form.addEventListener('submit', async (e: Event) => {
+      e.preventDefault();
+
+      // Client-side email validation
+      const email = emailInput.value.trim();
+      const emailPattern = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i;
+      if (!email || !emailPattern.test(email)) {
+        emailInput.focus();
+        return;
+      }
+
+      // Set submitting state
+      submitButton.disabled = true;
+      emailInput.disabled = true;
+
+      // Hide any previous error messages
+      errorMessage.style.display = 'none';
+
+      try {
+        // Create abort controller for timeout
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), timeout);
+
+        const response = await fetch(apiUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: email.toLowerCase(),
+            honeypot: honeypotInput?.value || '',
+            source: 'homepage',
+          }),
+          signal: controller.signal,
+        });
+
+        clearTimeout(timeoutId);
+
+        const data = await response.json();
+
+        if (response.ok && data.success) {
+          // Success state - hide form, show success message
+          form.style.display = 'none';
+          successMessage.style.display = 'flex';
+          successMessage.focus();
+        } else if (data.code === 'ALREADY_SUBSCRIBED') {
+          // Already subscribed state
+          form.style.display = 'none';
+          infoMessage.style.display = 'flex';
+          infoMessage.focus();
+        } else {
+          // Error state - show error message, enable retry
+          errorText.textContent = data.message || t.genericError;
+          errorMessage.style.display = 'flex';
+          submitButton.disabled = false;
+          emailInput.disabled = false;
+          emailInput.focus();
+        }
+      } catch (error) {
+        // Network error or timeout
+        if (error instanceof Error && error.name === 'AbortError') {
+          errorText.textContent = t.timeout;
+        } else {
+          errorText.textContent = t.networkError;
+        }
+        errorMessage.style.display = 'flex';
+        submitButton.disabled = false;
+        emailInput.disabled = false;
+        emailInput.focus();
+
+        // Log errors in development only
+        if (import.meta.env.DEV) {
+          console.error('Subscription form error:', error);
+        }
+      }
+    });
+  });
+</script>

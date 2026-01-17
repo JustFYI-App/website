@@ -1,0 +1,27 @@
+# Compiled output
+lib/
+
+# Node modules
+node_modules/
+
+# Log files
+*.log
+firebase-debug.log
+firebase-debug.*.log
+
+# Local environment files
+*.local
+.env
+.env.local
+
+# IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Coverage
+coverage/
+
+# Build artifacts
+*.tsbuildinfo

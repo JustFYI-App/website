@@ -23,3 +23,12 @@ dist/
 /CLAUDE.md
 /agent-os
 /.claude
+
+# Firebase
+firebase-debug.log
+firebase-debug.*.log
+.firebase/
+*-debug.log
+ui-debug.log
+firestore-debug.log
+pubsub-debug.log

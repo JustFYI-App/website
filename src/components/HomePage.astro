@@ -16,6 +16,7 @@ import AnonymousIdIcon from '@components/icons/AnonymousIdIcon.astro';
 import BluetoothIcon from '@components/icons/BluetoothIcon.astro';
 import PrivacyShieldIcon from '@components/icons/PrivacyShieldIcon.astro';
 import GitHubIcon from '@components/icons/GitHubIcon.astro';
+import SubscriptionForm from '@components/SubscriptionForm.astro';
 
 interface Props {
   lang: LanguageCode;
@@ -75,6 +76,9 @@ function getScreenshot(theme: 'light' | 'dark', langCode: string, num: number): 
       )}
     </div>
     <p class="hero__coming-soon">{t('common.comingSoon')}</p>
+
+    <!-- Email Subscription Form -->
+    <SubscriptionForm lang={lang} />
   </div>
 </section>
 

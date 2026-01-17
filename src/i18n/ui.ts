@@ -94,6 +94,7 @@ export interface UITranslations {
   subscribe: {
     title: string;
     placeholder: string;
+    cityPlaceholder: string;
     button: string;
     buttonSubmitting: string;
     success: string;
@@ -185,6 +186,7 @@ const en: UITranslations = {
   subscribe: {
     title: 'Get notified when Just FYI launches',
     placeholder: 'Enter your email',
+    cityPlaceholder: 'Your city (optional)',
     button: 'Subscribe',
     buttonSubmitting: 'Subscribing...',
     success: 'Thanks for subscribing! We\'ll keep you posted.',
@@ -276,6 +278,7 @@ const de: UITranslations = {
   subscribe: {
     title: 'Benachrichtigung erhalten, wenn Just FYI startet',
     placeholder: 'E-Mail-Adresse eingeben',
+    cityPlaceholder: 'Ihre Stadt (optional)',
     button: 'Abonnieren',
     buttonSubmitting: 'Wird abonniert...',
     success: 'Danke fuer Ihre Anmeldung! Wir halten Sie auf dem Laufenden.',
@@ -367,6 +370,7 @@ const es: UITranslations = {
   subscribe: {
     title: 'Recibe notificaciones cuando Just FYI se lance',
     placeholder: 'Ingresa tu correo electronico',
+    cityPlaceholder: 'Tu ciudad (opcional)',
     button: 'Suscribirse',
     buttonSubmitting: 'Suscribiendo...',
     success: 'Gracias por suscribirte! Te mantendremos informado.',
@@ -458,6 +462,7 @@ const fr: UITranslations = {
   subscribe: {
     title: 'Soyez informe du lancement de Just FYI',
     placeholder: 'Entrez votre email',
+    cityPlaceholder: 'Votre ville (optionnel)',
     button: 'S\'abonner',
     buttonSubmitting: 'Abonnement en cours...',
     success: 'Merci de vous etre abonne! Nous vous tiendrons informe.',
@@ -549,6 +554,7 @@ const pt: UITranslations = {
   subscribe: {
     title: 'Receba notificacoes quando o Just FYI for lancado',
     placeholder: 'Digite seu email',
+    cityPlaceholder: 'Sua cidade (opcional)',
     button: 'Inscrever-se',
     buttonSubmitting: 'Inscrevendo...',
     success: 'Obrigado por se inscrever! Manteremos voce informado.',

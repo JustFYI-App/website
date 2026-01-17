@@ -37,19 +37,34 @@ const timeout = getTimeout();
   <h3 class="subscription-form__title">{t('subscribe.title')}</h3>
 
   <form id="subscription-form" class="subscription-form__form" novalidate>
-    <div class="subscription-form__input-group">
-      <label for="email-input" class="sr-only">Email address</label>
-      <input
-        type="email"
-        id="email-input"
-        name="email"
-        class="subscription-form__input"
-        placeholder={t('subscribe.placeholder')}
-        required
-        pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$"
-        aria-describedby="email-hint"
-        autocomplete="email"
-      />
+    <div class="subscription-form__fields">
+      <div class="subscription-form__field">
+        <label for="email-input" class="sr-only">{t('subscribe.placeholder')}</label>
+        <input
+          type="email"
+          id="email-input"
+          name="email"
+          class="subscription-form__input"
+          placeholder={t('subscribe.placeholder')}
+          required
+          pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$"
+          aria-describedby="email-hint"
+          autocomplete="email"
+        />
+      </div>
+
+      <div class="subscription-form__field">
+        <label for="city-input" class="sr-only">{t('subscribe.cityPlaceholder')}</label>
+        <input
+          type="text"
+          id="city-input"
+          name="city"
+          class="subscription-form__input"
+          placeholder={t('subscribe.cityPlaceholder')}
+          maxlength="100"
+          autocomplete="address-level2"
+        />
+      </div>
 
       <!-- Honeypot field - hidden from users, traps bots -->
       <!-- Positioned off-screen (not display:none) to avoid bot detection -->
@@ -63,12 +78,12 @@ const timeout = getTimeout();
           autocomplete="off"
         />
       </div>
-
-      <button type="submit" class="btn btn-primary subscription-form__button">
-        <span class="subscription-form__button-text">{t('subscribe.button')}</span>
-        <span class="subscription-form__button-loading">{t('subscribe.buttonSubmitting')}</span>
-      </button>
     </div>
+
+    <button type="submit" class="btn btn-primary subscription-form__button">
+      <span class="subscription-form__button-text">{t('subscribe.button')}</span>
+      <span class="subscription-form__button-loading">{t('subscribe.buttonSubmitting')}</span>
+    </button>
 
     <p id="email-hint" class="subscription-form__privacy">
       {t('subscribe.privacyNote')}
@@ -130,15 +145,19 @@ const timeout = getTimeout();
   .subscription-form__form {
     display: flex;
     flex-direction: column;
-    gap: var(--space-3);
+    gap: var(--space-4);
   }
 
-  /* Stacked layout on mobile (320px - 639px) */
-  .subscription-form__input-group {
+  /* Fields container - stacked on mobile */
+  .subscription-form__fields {
     display: flex;
     flex-direction: column;
     gap: var(--space-3);
     position: relative;
+  }
+
+  .subscription-form__field {
+    width: 100%;
   }
 
   /* ==========================================================================
@@ -355,7 +374,7 @@ const timeout = getTimeout();
 
   /* ==========================================================================
      Tablet Breakpoint (640px - 1023px) - Inline Layout
-     Input and button side by side
+     Email and city inputs side by side
      ========================================================================== */
 
   @media (min-width: 640px) {
@@ -368,21 +387,20 @@ const timeout = getTimeout();
       margin-bottom: var(--space-5);
     }
 
-    /* Inline layout: input and button side by side */
-    .subscription-form__input-group {
+    /* Inline layout: email and city side by side */
+    .subscription-form__fields {
       flex-direction: row;
       gap: var(--space-3);
       align-items: stretch;
     }
 
-    .subscription-form__input {
+    .subscription-form__field {
       flex: 1;
       min-width: 0; /* Allow input to shrink */
     }
 
     .subscription-form__button {
-      width: auto;
-      flex-shrink: 0;
+      width: 100%;
       padding: var(--space-3) var(--space-6);
     }
 
@@ -392,7 +410,7 @@ const timeout = getTimeout();
   }
 
   /* ==========================================================================
-     Desktop Breakpoint (1024px+) - Inline Layout with Max-Width
+     Desktop Breakpoint (1024px+) - Wider layout
      ========================================================================== */
 
   @media (min-width: 1024px) {
@@ -405,7 +423,7 @@ const timeout = getTimeout();
       margin-bottom: var(--space-6);
     }
 
-    .subscription-form__input-group {
+    .subscription-form__fields {
       gap: var(--space-4);
     }
 
@@ -479,6 +497,7 @@ const timeout = getTimeout();
 
     const form = document.getElementById('subscription-form') as HTMLFormElement;
     const emailInput = document.getElementById('email-input') as HTMLInputElement;
+    const cityInput = document.getElementById('city-input') as HTMLInputElement;
     const honeypotInput = document.getElementById('website-field') as HTMLInputElement;
     const submitButton = form?.querySelector('button[type="submit"]') as HTMLButtonElement;
     const successMessage = formContainer.querySelector('.subscription-form__message--success') as HTMLElement;
@@ -537,9 +556,13 @@ const timeout = getTimeout();
       // Set submitting state
       submitButton.disabled = true;
       emailInput.disabled = true;
+      if (cityInput) cityInput.disabled = true;
 
       // Hide any previous error messages
       errorMessage.style.display = 'none';
+
+      // Get city value
+      const city = cityInput?.value?.trim() || '';
 
       try {
         // Create abort controller for timeout
@@ -553,6 +576,7 @@ const timeout = getTimeout();
           },
           body: JSON.stringify({
             email: email.toLowerCase(),
+            city: city,
             honeypot: honeypotInput?.value || '',
             source: 'homepage',
           }),
@@ -579,6 +603,7 @@ const timeout = getTimeout();
           errorMessage.style.display = 'flex';
           submitButton.disabled = false;
           emailInput.disabled = false;
+          if (cityInput) cityInput.disabled = false;
           emailInput.focus();
         }
       } catch (error) {
@@ -591,6 +616,7 @@ const timeout = getTimeout();
         errorMessage.style.display = 'flex';
         submitButton.disabled = false;
         emailInput.disabled = false;
+        if (cityInput) cityInput.disabled = false;
         emailInput.focus();
 
         // Log errors in development only

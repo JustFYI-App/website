@@ -166,7 +166,7 @@ A hidden form field that should remain empty. Bots typically fill all form field
 ```json
 {
   "email": "user@example.com",
-  "honeypot": ""  // Must be empty or undefined
+  "honeypot": "" 
 }
 ```
 

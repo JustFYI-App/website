@@ -110,7 +110,7 @@ export const ResponseMessages = {
  * - Stores subscriber data in Firestore
  *
  * POST /subscribe
- * Body: { email: string, honeypot?: string, source?: string }
+ * Body: { email: string, city?: string, honeypot?: string, source?: string }
  *
  * Response codes:
  * - 200: Successfully subscribed
@@ -147,7 +147,7 @@ export const subscribe = onRequest(
     }
 
     try {
-      const { email, honeypot, source = "website" } = req.body || {};
+      const { email, city, honeypot, source = "website" } = req.body || {};
 
       // Check honeypot field (should be empty) - don't reveal detection
       if (isBot(honeypot)) {
@@ -209,9 +209,15 @@ export const subscribe = onRequest(
         return;
       }
 
+      // Sanitize city (trim and limit length)
+      const sanitizedCity = city && typeof city === "string"
+        ? city.trim().slice(0, 100)
+        : "";
+
       // Store subscriber
       await db.collection("subscribers").doc(normalizedEmail).set({
         email: normalizedEmail,
+        city: sanitizedCity,
         subscribedAt: admin.firestore.FieldValue.serverTimestamp(),
         ipHash: ipHash,
         userAgent: req.headers["user-agent"] || "unknown",
